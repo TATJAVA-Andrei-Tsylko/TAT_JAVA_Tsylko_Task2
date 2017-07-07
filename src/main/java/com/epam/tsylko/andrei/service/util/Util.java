@@ -17,7 +17,7 @@ public final class Util {
     private static Logger logger = Logger.getLogger(Util.class);
     private static final String ISBN = "^(97(8|9))?\\d{5}(\\d|X)$";
     private static final String EMAIL = "\\w+@[a-zA-Z_]+?\\.[a-zA-Z]{2,6}";
-    private static final String DATE = "((?:19|20)\\d\\d)/(0?[1-9]|1[012])/([12][0-9]|3[01]|0?[1-9])";
+    private static final String DATE = "\\d{4}-\\d{2}-\\d{2}";
 
     public final static void isNull(Object... objects) throws UtilException {
         for (Object ob : objects) {

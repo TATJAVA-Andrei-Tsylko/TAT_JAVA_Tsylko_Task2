@@ -63,6 +63,7 @@ public class ControllerUtil {
             }
         } else {
             date = new java.sql.Date(Calendar.getInstance().getTime().getTime());
+            logger.debug("Date: " + date);
         }
 
         return new java.sql.Date(date.getTime());
