@@ -17,6 +17,8 @@ public class ControllerUtil {
     private final static String ID = "&id=";
     private final static String BOOLEAN_TRUE = "true";
     private final static String BOOLEAN_FALSE = "false";
+    private final static String ORDER_DESC = "DESC";
+    private final static String ORDER_ASC = "ASC";
 
     public final static String cutActionPart(String request) {
         String start = "&";
@@ -68,7 +70,7 @@ public class ControllerUtil {
 
 
     public final static Book initBookObj(Map<String, String> dataFromRequest) throws ControllerUtilException {
-        logger.debug("ControllerUtil.initBookObj");
+        logger.debug("ControllerUtil.initBookObj()");
         Book book;
         try {
             book = new Book(parseNumberOrNullStringToInt(getValueFromMapByKey(dataFromRequest, "bookId")), getValueFromMapByKey(dataFromRequest, "booksName"), getValueFromMapByKey(dataFromRequest, "authorName"), getValueFromMapByKey(dataFromRequest, "authorSurname"),
@@ -79,6 +81,18 @@ public class ControllerUtil {
         }
 
         return book;
+    }
+    public final static String getSortOrderFromRequest(Map<String, String> dataFromRequest) throws ControllerUtilException {
+        logger.debug("ControllerUtil.getSortOrderFromRequest()");
+        String order = getValueFromMapByKey(dataFromRequest, "order");
+        if(order.equalsIgnoreCase(ORDER_ASC)){
+            return ORDER_ASC;
+        }else if(order.equalsIgnoreCase(ORDER_DESC)){
+            return ORDER_DESC;
+        }else{
+            throw new ControllerUtilException("Incorrect value for order sort " + order);
+        }
+
     }
 
 

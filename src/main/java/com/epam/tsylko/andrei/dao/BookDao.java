@@ -21,7 +21,7 @@ public interface BookDao {
 
     void makeBookNotFree(int bookId, boolean booksFreeStatus,Connection connection) throws DAOException;
 
-    List<Book> sortFreeBooksByDate() throws DAOException;
+    List<Book> sortFreeBooksByDate(String sortOrder) throws DAOException;
 
     List<Book> sortAllBooksByDate() throws DAOException;
 

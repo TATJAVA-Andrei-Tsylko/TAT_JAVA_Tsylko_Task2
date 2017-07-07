@@ -10,7 +10,7 @@ import java.util.List;
 public interface ClientService {
 
     void registration(User user)throws ServiceException;
-//TODO add signIn
+
     void signIn(User user)throws ServiceException;
 
     void editUser(User user)throws ServiceException;
@@ -18,6 +18,8 @@ public interface ClientService {
     List<User> getAllUsers()throws ServiceException;
 
     User getUser(int userId)throws ServiceException;
+
+    User getUser(User user)throws ServiceException;
 
     boolean checkUserRole(int userId, Role superAdmin)throws ServiceException;
     boolean checkUserRole(int userId, Role superAdmin,Role admin)throws ServiceException;

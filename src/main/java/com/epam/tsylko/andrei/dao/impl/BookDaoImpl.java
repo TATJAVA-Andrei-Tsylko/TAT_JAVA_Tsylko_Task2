@@ -26,6 +26,7 @@ public class BookDaoImpl implements BookDao {
     private static final String GET_BOOK = "SELECT * FROM library.book where id = ?;";
     private static final String GET_BOOKS = "SELECT * FROM library.book;";
     private static final String FREE_BOOK="UPDATE `library`.`book` SET `isFree`=? WHERE `id`=?;";
+    private static final String FREE_SORTED_BOOKS = "SELECT * FROM library.book where library.book.isFree = 1 ORDER by library.book.yearPublished = ?;";
 
     @Override
     public void addBook(Book book) throws DAOException {
@@ -220,10 +221,38 @@ public class BookDaoImpl implements BookDao {
         }
     }
 
-    //TODO ADD excecution strings
     @Override
-    public List<Book> sortFreeBooksByDate() {
-        return null;
+    public List<Book> sortFreeBooksByDate(String sortOrder) throws DAOException {
+        logger.debug("BookDaoImpl.sortFreeBooksByDate()");
+        ConnectionPool connectionPool = null;
+        Connection connection = null;
+        PreparedStatement ps = null;
+        ResultSet resultSet = null;
+        List<Book> books = new ArrayList<>();
+        try {
+            //            TODO change connection pool
+            connectionPool = new ConnectionPool();
+            connection = connectionPool.getConnection();
+            ps = connection.prepareStatement(FREE_SORTED_BOOKS);
+            ps.setString(1, sortOrder);
+            resultSet = ps.executeQuery();
+            while (resultSet.next()) {
+                Book book = new Book();
+                book = setBooksParams(book, resultSet);
+                books.add(book);
+            }
+        } catch (ConnectionPoolException e) {
+            throw new DAOException("can't get connection in database", e);
+        } catch (SQLException e) {
+            throw new DAOException("Operation failed in database. Cannot retrieve books", e);
+        } finally {
+            if (connectionPool != null) {
+                connectionPool.closeConnection(connection, ps, resultSet);
+            }
+        }
+        logger.debug("BookDaoImpl.getAllBooks() - success");
+
+        return books;
     }
 
     @Override

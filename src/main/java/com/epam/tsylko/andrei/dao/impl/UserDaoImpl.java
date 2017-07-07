@@ -30,6 +30,7 @@ public class UserDaoImpl implements UserDao {
     private static final String SET_ROLE = "UPDATE `library`.`user` SET `role`= ? WHERE `id`=?;";
     private static final String GET_USER = "SELECT * FROM library.user where id =?";
     private static final String GET_USERS = "SELECT * FROM library.user";
+    private static final String USER_LOGIN = "SELECT * FROM library.user where library.user.login = ?";
 
 
     @Override
@@ -56,11 +57,6 @@ public class UserDaoImpl implements UserDao {
         }
     }
 
-    //TODO complete methods
-    @Override
-    public void signIn(User user) {
-
-    }
 
     @Override
     public List<User> getAllUsers() throws DAOException {
@@ -140,6 +136,43 @@ public class UserDaoImpl implements UserDao {
                 User user = new User();
                 user = setUsersParams(user, resultSet);
                 users.add(user);
+            }
+        } catch (SQLException e) {
+            throw new DAOException("Operation failed in database. Cannot retrieve user", e);
+        } finally {
+            if (connectionPool != null) {
+                connectionPool.closeConnection(connection, ps, resultSet);
+            }
+        }
+        if (users == null || users.size() == 0) {
+            throw new DAOException("Nothing receive from db");
+        }
+        if (users.size() > 1) {
+            throw new DAOException("Receive more than one record");
+        }
+        return users.get(0);
+    }
+
+    @Override
+    public User getUser(User user) throws DAOException {
+        logger.debug("User.getUser() from user object");
+        logger.debug("User in method User.getUser(): " + user.toString());
+        ConnectionPool connectionPool = null;
+        Connection connection = null;
+        PreparedStatement ps = null;
+        ResultSet resultSet = null;
+        List<User> users = new ArrayList<>();
+        try {
+//            TODO change connection pool
+            connectionPool = new ConnectionPool();
+            connection = connectionPool.getConnection();
+            ps = connection.prepareStatement(USER_LOGIN);
+            ps.setString(1, user.getLogin());
+            resultSet = ps.executeQuery();
+            while (resultSet.next()) {
+                User userFromRequest = new User();
+                userFromRequest = setUsersParams(userFromRequest, resultSet);
+                users.add(userFromRequest);
             }
         } catch (SQLException e) {
             throw new DAOException("Operation failed in database. Cannot retrieve user", e);

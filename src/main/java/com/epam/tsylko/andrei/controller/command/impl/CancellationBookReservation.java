@@ -48,7 +48,7 @@ public class CancellationBookReservation implements Command {
         ServiceFactory serviceFactory = ServiceFactory.getInstance();
         ClientService clientService = serviceFactory.getClientService();
         try {
-            return (clientService.checkUserRole(ControllerUtil.findUserIdInRequest(request), Role.SUPER_ADMIN, Role.ADMIN));
+            return (clientService.checkUserRole(ControllerUtil.findUserIdInRequest(request), Role.SUPER_ADMIN, Role.ADMIN, Role.USER));
         } catch (ServiceException e) {
             logger.error("Error in service layer", e);
         } catch (ControllerUtilException e) {

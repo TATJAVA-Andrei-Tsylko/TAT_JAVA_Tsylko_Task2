@@ -63,6 +63,9 @@ public class Main {
 //        String addUser="action=USER_REGISTRATION&login=monk1&password=monk&userName=Anto&userSurname=Anto&birthday=1986-02-03&email=anto@mail.ru&phone=37525515666";
 //        System.out.println(controller.executeTask(addUser));
 
+//        String addUser2="action=USER_REGISTRATION&login=monk3&password=monk3&userName=Anto&userSurname=Anto&birthday=1986-02-03&email=anto@mail.ru&phone=37525515666";
+//        System.out.println(controller.executeTask(addUser2));
+
 //        String editUser="action=USER_EDITED&userId=10&password=monkM&userName=Anto&userSurname=Anto&birthday=1986-02-03&email=anto@mail.ru&phone=37525515666&id=10";
 //        System.out.println(controller.executeTask(editUser));
 
@@ -86,6 +89,9 @@ public class Main {
 //                        String reservBook="action=BOOK_RESERVATION&userId=11&bookId=4&id=3";
 //        System.out.println(controller.executeTask(reservBook));
 
+//        String reservBookBanUser="action=BOOK_RESERVATION&userId=11&bookId=4&id=11";
+//        System.out.println(controller.executeTask(reservBookBanUser));
+
 
 
 //        String reservBookCancel="action=CANCELLATION_BOOK_RESERVATION&orderId=6&bookId=4&id=3";
@@ -100,8 +106,11 @@ public class Main {
 //        String reduceRoleCommand="action=REDUCE_ACCESS_LEVEL_COMMAND&userId=10&role=USER&id=4";
 //        System.out.println(controller.executeTask(reduceRoleCommand));
 
-        String signIn="action=SIGN_IN&login=mill9r&password=mill9r&id=4";
-        System.out.println(controller.executeTask(signIn));
+//        String signIn="action=SIGN_IN&login=monk3&password=monk3";
+//        System.out.println(controller.executeTask(signIn));
+
+        String sordtedFreeBooks="action=SORTED_BOOKS&order=desc";
+        System.out.println(controller.executeTask(sordtedFreeBooks));
 
 
 //        System.out.println(ControllerUtil.cutActionPart(a));

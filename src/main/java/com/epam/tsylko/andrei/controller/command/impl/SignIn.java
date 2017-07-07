@@ -13,7 +13,7 @@ import org.apache.log4j.Logger;
 import java.util.Map;
 
 public class SignIn implements Command {
-    private static Logger logger = Logger.getLogger(SingleUser.class);
+    private static Logger logger = Logger.getLogger(SignIn.class);
     private String response;
     @Override
     public String execute(String request) {
@@ -29,10 +29,9 @@ public class SignIn implements Command {
             response = "User was signed in";
         } catch (ServiceException e) {
             logger.error("Error in service layer", e);
-            response = "User was not found.";
+            response = "Error during sign in operation.";
         } catch (ControllerUtilException e) {
             logger.error("request params " + SignIn.class.getName() + " was incorrect: " + request, e);
-
             response = "Error during retrieving user";
         }
         return response;

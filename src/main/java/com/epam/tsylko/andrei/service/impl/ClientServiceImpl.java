@@ -8,6 +8,8 @@ import com.epam.tsylko.andrei.entities.Role;
 import com.epam.tsylko.andrei.entities.User;
 import com.epam.tsylko.andrei.service.ClientService;
 import com.epam.tsylko.andrei.service.exception.ServiceException;
+import com.epam.tsylko.andrei.service.util.Util;
+import com.epam.tsylko.andrei.service.util.exception.UtilException;
 import org.apache.log4j.Logger;
 
 import java.util.List;
@@ -23,9 +25,18 @@ public class ClientServiceImpl implements ClientService {
         UserDao userDao = daoFactory.getMysqlUserImpl();
 
         try {
+            checkRegistrationParams(user);
+            Util.checkEmail(user);
+            user.setPassword(Util.getHashForPassword(user.getPassword()));
+            logger.debug("registrtion user " + user.toString());
+            checkLogin(user);
+
             userDao.registration(user);
+
         } catch (DAOException e) {
             throw new ServiceException(e);
+        } catch (UtilException e) {
+            throw new ServiceException("Check inputed params in registration form", e);
         }
     }
 
@@ -35,9 +46,13 @@ public class ClientServiceImpl implements ClientService {
         UserDao userDao = daoFactory.getMysqlUserImpl();
 
         try {
-            userDao.signIn(user);
+            User userFromDB=userDao.getUser(user);
+            logger.debug("User from DB " + userFromDB.toString());
+            Util.checkHash(userFromDB.getPassword(),user.getPassword());
         } catch (DAOException e) {
             throw new ServiceException(e);
+        } catch (UtilException e) {
+            throw new ServiceException("Incorrect password " + user.getPassword());
         }
     }
 
@@ -47,8 +62,15 @@ public class ClientServiceImpl implements ClientService {
         UserDao userDao = daoFactory.getMysqlUserImpl();
 
         try {
+
+            Util.checkEmail(user);
+            Util.isEmptyString(user.getPassword());
+            user.setPassword(Util.getHashForPassword(user.getPassword()));
+
             userDao.editUser(user);
         } catch (DAOException e) {
+            throw new ServiceException(e);
+        } catch (UtilException e) {
             throw new ServiceException(e);
         }
     }
@@ -80,6 +102,19 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
+    public User getUser(User user) throws ServiceException {
+        logger.debug("ClientServiceImpl.getUser");
+        UserDao userDao = daoFactory.getMysqlUserImpl();
+        User userFromRequest = null;
+        try {
+            userFromRequest = userDao.getUser(user);
+            return userFromRequest;
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
     public boolean checkUserRole(int userId, Role superAdmin) throws ServiceException {
         logger.debug("ClientServiceImpl.checkUserRole");
         UserDao userDao = daoFactory.getMysqlUserImpl();
@@ -90,7 +125,7 @@ public class ClientServiceImpl implements ClientService {
             throw new ServiceException(e);
         }
         logger.debug("checkUserRole:" + user.toString());
-        return user.getRole().equals(superAdmin) ;
+        return (user.getRole().equals(superAdmin)) && user.isEnabled() != false;
     }
 
     @Override
@@ -104,7 +139,7 @@ public class ClientServiceImpl implements ClientService {
             throw new ServiceException(e);
         }
         logger.debug("checkUserRole:" + user.toString());
-        return user.getRole().equals(superAdmin)||user.getRole().equals(admin) ;
+        return (user.getRole().equals(superAdmin) || user.getRole().equals(admin)) && user.isEnabled() != false;
     }
 
     @Override
@@ -118,7 +153,7 @@ public class ClientServiceImpl implements ClientService {
             throw new ServiceException(e);
         }
         logger.debug("checkUserRole:" + user.toString());
-        return user.getRole().equals(superAdmin)||user.getRole().equals(admin) || user.getRole().equals(userRole) ;
+        return (user.getRole().equals(superAdmin) || user.getRole().equals(admin) || user.getRole().equals(userRole)) && user.isEnabled() != false;
     }
 
     @Override
@@ -142,6 +177,27 @@ public class ClientServiceImpl implements ClientService {
             userDao.changeRole(userId, role);
         } catch (DAOException e) {
             throw new ServiceException(e);
+        }
+    }
+
+    private void checkRegistrationParams(User user) throws UtilException {
+        logger.debug("ClientServiceImpl.checkRegistrationParams");
+        Util.isNull(user.getLogin(), user.getPassword());
+        Util.isEmptyString(user.getLogin(), user.getPassword());
+
+    }
+
+    private void checkLogin(User user) throws ServiceException {
+        logger.debug("ClientServiceImpl.checkLogin");
+        user.toString();
+        User checkedUser = null;
+        try {
+            checkedUser = getUser(user);
+        } catch (ServiceException e) {
+            logger.info("Login " + user.getLogin() + " exist.");
+        }
+        if (checkedUser != null) {
+            throw new ServiceException("Login exist");
         }
     }
 }

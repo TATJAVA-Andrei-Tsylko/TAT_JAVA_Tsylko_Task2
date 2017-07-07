@@ -15,7 +15,7 @@ public interface LibraryService {
 
     Book getBookFromTheLibrary(int bookId) throws ServiceException;
 
-    List<Book> sortFreeBooksByDate() throws ServiceException;
+    List<Book> sortFreeBooksByDate(String order) throws ServiceException;
 
     List<Book> sortAllBooksByDate() throws ServiceException;
 

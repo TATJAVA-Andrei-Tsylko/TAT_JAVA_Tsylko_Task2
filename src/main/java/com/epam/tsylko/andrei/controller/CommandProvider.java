@@ -35,6 +35,7 @@ public final class CommandProvider {
         repository.put(CommandName.BOOK_LEAVED_LIBRARY,new BookLeavedLibrary());
         repository.put(CommandName.BOOK_RETURNED_COMMAND,new BookReturnCommand());
         repository.put(CommandName.REDUCE_ACCESS_LEVEL_COMMAND,new ReduceAccessLevelCommand());
+        repository.put(CommandName.SORTED_BOOKS,new SortedFreeBooksByDate());
     }
 
 

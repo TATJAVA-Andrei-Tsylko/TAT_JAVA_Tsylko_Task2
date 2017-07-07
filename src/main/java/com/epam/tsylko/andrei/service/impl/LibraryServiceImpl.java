@@ -74,8 +74,16 @@ public class LibraryServiceImpl implements LibraryService {
     }
 //TODO service layer
     @Override
-    public List<Book> sortFreeBooksByDate() throws ServiceException {
-        return null;
+    public List<Book> sortFreeBooksByDate(String order) throws ServiceException {
+        logger.debug("LibraryServiceImpl.sortFreeBooksByDate()");
+        BookDao bookDao = daoFactory.getMysqlBookImpl();
+        List<Book> books = null;
+        try {
+            books = bookDao.sortFreeBooksByDate(order);
+            return books;
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
     }
 
     @Override

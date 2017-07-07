@@ -10,11 +10,11 @@ public interface UserDao {
 
     void registration(User user)throws DAOException;
 
-    void signIn(User user)throws DAOException;
-
     void editUser(User user)throws DAOException;
 
     User getUser(int userId)throws DAOException;
+
+    User getUser(User user)throws DAOException;
 
     List<User> getAllUsers()throws DAOException;
 
