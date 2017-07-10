@@ -1,6 +1,8 @@
 package com.epam.tsylko.andrei.controller.util;
 
 
+
+import com.epam.tsylko.andrei.controller.builder.*;
 import com.epam.tsylko.andrei.entity.*;
 import org.apache.log4j.Logger;
 
@@ -9,19 +11,43 @@ import java.text.ParseException;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ControllerUtil {
-    private static Logger logger = Logger.getLogger(ControllerUtil.class);
+    private final static Logger logger = Logger.getLogger(ControllerUtil.class);
+    private final static String ORDER_DESC = "DESC";
+    private final static String ORDER_ASC = "ASC";
+    private final static String REQUEST = "^action=.+&.+";
     private final static String ID = "&id=";
     private final static String BOOLEAN_TRUE = "true";
     private final static String BOOLEAN_FALSE = "false";
-    private final static String ORDER_DESC = "DESC";
-    private final static String ORDER_ASC = "ASC";
+    private final static String AMP = "[&]";
+    private final static String EQUAL = "[=]";
+    private final static String DATE_PATTERN = "yyyy-MM-dd";
+    private final static String DELIMITER_DATA_BEFORE = "-";
+    private final static String DELIMITER_DATA_AFTER = "[\\./]";
+    private final static String ORDER = "order";
+    private final static String ROLE = "role";
+    private final static String USER_ID = "userId";
+    private final static String ENABLE = "enabled";
 
-    public final static String cutActionPart(String request) {
-        String start = "&";
-        int end = request.length();
-        return request.substring(request.indexOf(start) + 1, end);
+
+    public final static boolean checkRequestLink(String request) throws ControllerUtilException {
+        boolean result = false;
+        if (request == null || request.isEmpty()) {
+
+        } else {
+            Pattern pattern = Pattern.compile(REQUEST);
+
+            Matcher matcher = pattern.matcher(request);
+            result = matcher.matches();
+            if (!result) {
+                throw new ControllerUtilException("Invalid request.");
+            }
+
+        }
+        return result;
     }
 
     public final static Map<String, String> castRequestParamToMap(String request) throws ControllerUtilException {
@@ -31,7 +57,7 @@ public class ControllerUtil {
             for (String pair : splitAmp(request)) {
                 String params[] = splitEqual(pair);
                 if (params.length != 2) {
-                    throw new ControllerUtilException("Check params");
+                    throw new ControllerUtilException("Check params in request");
                 }
                 requestParams.put(params[0], params[1]);
             }
@@ -41,18 +67,18 @@ public class ControllerUtil {
     }
 
     private static String[] splitAmp(String request) {
-        return request.split("[&]");
+        return request.split(AMP);
     }
 
     private static String[] splitEqual(String request) {
-        return request.split("[=]");
+        return request.split(EQUAL);
     }
 
-    public final static java.sql.Date castStringToSqlDate(String time) throws ControllerUtilException {
-        java.util.Date date = null;
+    private final static java.sql.Date castStringToSqlDate(String time) throws ControllerUtilException {
+        java.util.Date date;
         if (time != null && !time.isEmpty()) {
-            time = time.replaceAll("[\\./]", "-");
-            java.text.DateFormat format = new java.text.SimpleDateFormat("yyyy-MM-dd");
+            time = time.replaceAll(DELIMITER_DATA_AFTER, DELIMITER_DATA_BEFORE);
+            java.text.DateFormat format = new java.text.SimpleDateFormat(DATE_PATTERN);
 
             try {
                 date = format.parse(time);
@@ -61,120 +87,14 @@ public class ControllerUtil {
             }
         } else {
             date = new java.sql.Date(Calendar.getInstance().getTime().getTime());
-            logger.debug("Date: " + date);
+
+            if (logger.isDebugEnabled()) {
+                logger.debug("Date: " + date);
+            }
         }
 
         return new java.sql.Date(date.getTime());
     }
-
-//TODO INNER CLASS
-    public final static Book initBookObj(Map<String, String> dataFromRequest) throws ControllerUtilException {
-        logger.debug("ControllerUtil.initBookObj()");
-        Book book;
-        try {
-            book = new Book(parseNumberOrNullStringToInt(getValueFromMapByKey(dataFromRequest, "bookId")), getValueFromMapByKey(dataFromRequest, "booksName"), getValueFromMapByKey(dataFromRequest, "authorName"), getValueFromMapByKey(dataFromRequest, "authorSurname"),
-                    getValueFromMapByKey(dataFromRequest, "publisher"), getValueFromMapByKey(dataFromRequest, "cityPublisher"), ControllerUtil.castStringToSqlDate(getValueFromMapByKey(dataFromRequest, "yearPublished")),
-                    parseNumberOrNullStringToInt(getValueFromMapByKey(dataFromRequest, "ISBN")), parseNumberOrNullStringToInt(getValueFromMapByKey(dataFromRequest, "printRun")), parseNumberOrNullStringToInt(getValueFromMapByKey(dataFromRequest, "paperBack")));
-        } catch (NumberFormatException e) {
-            throw new ControllerUtilException("Numbers isn't parsable in method initBookObj");
-        }
-
-        return book;
-    }
-    public final static String getSortOrderFromRequest(Map<String, String> dataFromRequest) throws ControllerUtilException {
-        logger.debug("ControllerUtil.getSortOrderFromRequest()");
-        String order = getValueFromMapByKey(dataFromRequest, "order");
-        if(order.equalsIgnoreCase(ORDER_ASC)){
-            return ORDER_ASC;
-        }else if(order.equalsIgnoreCase(ORDER_DESC)){
-            return ORDER_DESC;
-        }else{
-            throw new ControllerUtilException("Incorrect value for order sort " + order);
-        }
-
-    }
-
-
-    public final static Address initAddressObj(Map<String, String> dataFromRequest) throws ControllerUtilException {
-        logger.debug("ControllerUtil.initAddressObj");
-        Address address;
-        try {
-            address = new Address(parseNumberOrNullStringToInt(getValueFromMapByKey(dataFromRequest, "addressId")), getValueFromMapByKey(dataFromRequest, "country"),
-                    getValueFromMapByKey(dataFromRequest, "city"), getValueFromMapByKey(dataFromRequest, "street"), parseNumberOrNullStringToInt(getValueFromMapByKey(dataFromRequest, "house")),
-                    parseNumberOrNullStringToInt(getValueFromMapByKey(dataFromRequest, "room")));
-
-        } catch (NumberFormatException e) {
-            throw new ControllerUtilException("Numbers isn't parsable in method initAddressObj ");
-        }
-
-        return address;
-    }
-
-    public final static User initUserObj(Map<String, String> dataFromRequest) throws ControllerUtilException {
-        logger.debug("ControllerUtil.initUserObj");
-        User user;
-        try {
-            user = new User(parseNumberOrNullStringToInt(getValueFromMapByKey(dataFromRequest, "userId")), getValueFromMapByKey(dataFromRequest, "login"),
-                    getValueFromMapByKey(dataFromRequest, "password"), getValueFromMapByKey(dataFromRequest, "userName"),
-                    getValueFromMapByKey(dataFromRequest, "userSurname"), castStringToSqlDate(getValueFromMapByKey(dataFromRequest, "birthday")),
-                    new Address(parseNumberOrNullStringToInt(getValueFromMapByKey(dataFromRequest, "address"))), getValueFromMapByKey(dataFromRequest, "email"), getValueFromMapByKey(dataFromRequest, "phone"));
-
-        } catch (NumberFormatException e) {
-            throw new ControllerUtilException("Numbers isn't parsable in method initUserObj");
-        }
-        return user;
-    }
-
-    public final static User initUserObjWithRoleParam(Map<String, String> dataFromRequest) throws ControllerUtilException {
-        logger.debug("ControllerUtil.initUserObjWithRoleParam");
-        User user;
-//        TODO check another methods
-        if (getValueFromMapByKey(dataFromRequest, "role") != null && Role.getByName(getValueFromMapByKey(dataFromRequest, "role")) != Role.SUPER_ADMIN) {
-            try {
-
-                    user = new User(parseNumberOrNullStringToInt(getValueFromMapByKey(dataFromRequest, "userId")), Role.getByName(getValueFromMapByKey(dataFromRequest, "role")));
-
-
-            } catch (NumberFormatException e) {
-                throw new ControllerUtilException("Numbers isn't parsable in method initUserObjWithRoleParam");
-            }
-        }else{
-            throw new ControllerUtilException("Request doesn't content role");
-        }
-        return user;
-    }
-    public final static User initUserObjWithBlockParam(Map<String, String> dataFromRequest) throws ControllerUtilException {
-        logger.debug("ControllerUtil.initUserObjWithBlockParam");
-        User user;
-//        TODO check another methods
-        if (getValueFromMapByKey(dataFromRequest, "enabled") != null) {
-            try {
-
-                user = new User(parseNumberOrNullStringToInt(getValueFromMapByKey(dataFromRequest, "userId")), parseBooleanValueFromString(getValueFromMapByKey(dataFromRequest, "enabled")));
-
-
-            } catch (NumberFormatException e) {
-                throw new ControllerUtilException("Numbers isn't parsable in method initUserObjWithBlockParam");
-            }
-        }else{
-            throw new ControllerUtilException("Request doesn't content user enable status");
-        }
-        return user;
-    }
-
-    public final static OrdersRepository initOrderObj(Map<String, String> dataFromRequest) throws ControllerUtilException {
-        logger.debug("ControllerUtil.initOrderObj");
-        OrdersRepository repository;
-        try {
-            repository = new OrdersRepository(parseNumberOrNullStringToInt(getValueFromMapByKey(dataFromRequest, "orderId")), new Book (parseNumberOrNullStringToInt(getValueFromMapByKey(dataFromRequest, "bookId"))),
-                    new User (parseNumberOrNullStringToInt(getValueFromMapByKey(dataFromRequest, "userId"))));
-
-        } catch (NumberFormatException e) {
-            throw new ControllerUtilException("Numbers isn't parsable in method initUserObj");
-        }
-        return repository;
-    }
-
 
     private static int parseNumberOrNullStringToInt(String param) {
 
@@ -206,6 +126,19 @@ public class ControllerUtil {
         return value;
     }
 
+    public static final int parseStringToIntFromMap(Map<String, String> requestMap, String key) {
+        String number = getValueFromMapByKey(requestMap, key);
+        int result = parseNumberOrNullStringToInt(number);
+        return result;
+
+    }
+
+    public static final java.sql.Date parseSQLDateFromMap(Map<String, String> requestMap, String key) throws ControllerUtilException {
+        String dateString = getValueFromMapByKey(requestMap, key);
+        java.sql.Date date = castStringToSqlDate(dateString);
+        return date;
+    }
+
     public final static int findUserIdInRequest(String request) throws ControllerUtilException {
         int end = request.length();
         String id = request.substring(request.indexOf(ID) + 4, end);
@@ -217,6 +150,112 @@ public class ControllerUtil {
         }
 
         return userId;
+    }
+
+    public final static Book initBookObj(Map<String, String> dataFromRequest) throws ControllerUtilException {
+        if (logger.isDebugEnabled()) {
+            logger.debug("ControllerUtil.initBookObj()");
+        }
+
+        Director<Book> director = new Director<Book>(new BookBuilder());
+        Book book = director.createEntity(dataFromRequest);
+        return book;
+    }
+
+    public final static String getSortOrderFromRequest(Map<String, String> dataFromRequest) throws ControllerUtilException {
+        if (logger.isDebugEnabled()) {
+            logger.debug("ControllerUtil.getSortOrderFromRequest()");
+        }
+
+        String order = getValueFromMapByKey(dataFromRequest, ORDER);
+        if (order.equalsIgnoreCase(ORDER_ASC)) {
+            return ORDER_ASC;
+        } else if (order.equalsIgnoreCase(ORDER_DESC)) {
+            return ORDER_DESC;
+        } else {
+            throw new ControllerUtilException("Incorrect value for order sort " + order);
+        }
+
+    }
+
+
+
+    public final static Address initAddressObj(Map<String, String> dataFromRequest) throws ControllerUtilException {
+        if (logger.isDebugEnabled()) {
+            logger.debug("ControllerUtil.initAddressObj");
+        }
+
+        Director<Address> director = new Director<Address>(new AddressBuilder());
+        Address address = director.createEntity(dataFromRequest);
+        return address;
+    }
+
+    public final static User initUserObj(Map<String, String> dataFromRequest) throws ControllerUtilException {
+        if (logger.isDebugEnabled()) {
+            logger.debug("ControllerUtil.initUserObj");
+        }
+
+        Director<User> director = new Director<User>(new UserBuilder());
+        User user = director.createEntity(dataFromRequest);
+        return user;
+    }
+
+
+
+    public final static User initUserObjWithRoleParam(Map<String, String> dataFromRequest) throws ControllerUtilException {
+        if (logger.isDebugEnabled()) {
+            logger.debug("ControllerUtil.initUserObjWithRoleParam");
+        }
+
+        User user;
+
+        if (getValueFromMapByKey(dataFromRequest, ROLE) != null &&
+                Role.getByName(getValueFromMapByKey(dataFromRequest, ROLE)) != Role.SUPER_ADMIN) {
+            try {
+
+                user = new User(parseNumberOrNullStringToInt(getValueFromMapByKey(dataFromRequest, USER_ID)),
+                        Role.getByName(getValueFromMapByKey(dataFromRequest, ROLE)));
+
+            } catch (NumberFormatException e) {
+                throw new ControllerUtilException("Numbers isn't parsable in method initUserObjWithRoleParam");
+            }
+        } else {
+            throw new ControllerUtilException("Request doesn't content role");
+        }
+        return user;
+    }
+
+
+
+    public final static User initUserObjWithBlockParam(Map<String, String> dataFromRequest) throws ControllerUtilException {
+        if (logger.isDebugEnabled()) {
+            logger.debug("ControllerUtil.initUserObjWithBlockParam");
+        }
+
+        User user;
+//        TODO check another methods
+        if (getValueFromMapByKey(dataFromRequest, ENABLE) != null) {
+            try {
+
+                user = new User(parseNumberOrNullStringToInt(getValueFromMapByKey(dataFromRequest, USER_ID)),
+                        parseBooleanValueFromString(getValueFromMapByKey(dataFromRequest, ENABLE)));
+
+            } catch (NumberFormatException e) {
+                throw new ControllerUtilException("Numbers isn't parsable in method initUserObjWithBlockParam");
+            }
+        } else {
+            throw new ControllerUtilException("Request doesn't content user enable status");
+        }
+        return user;
+    }
+
+    public final static OrdersRepository initOrderObj(Map<String, String> dataFromRequest) throws ControllerUtilException {
+        if (logger.isDebugEnabled()) {
+            logger.debug("ControllerUtil.initOrderObj");
+        }
+        Director<OrdersRepository> director = new Director<>(new OrdersRepositoryBuilder());
+        OrdersRepository repository = director.createEntity(dataFromRequest);
+        return repository;
     }
 
 }

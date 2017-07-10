@@ -4,43 +4,49 @@ package com.epam.tsylko.andrei.controller.command.impl;
 import com.epam.tsylko.andrei.controller.command.Command;
 import com.epam.tsylko.andrei.controller.util.ControllerUtil;
 import com.epam.tsylko.andrei.controller.util.ControllerUtilException;
-import com.epam.tsylko.andrei.entity.Address;
+import com.epam.tsylko.andrei.entity.OrdersRepository;
 import com.epam.tsylko.andrei.entity.Role;
 import com.epam.tsylko.andrei.service.ClientService;
-import com.epam.tsylko.andrei.service.ResidenceService;
+import com.epam.tsylko.andrei.service.OrdersService;
 import com.epam.tsylko.andrei.service.exception.ServiceException;
 import com.epam.tsylko.andrei.service.factory.ServiceFactory;
 import org.apache.log4j.Logger;
 
 import java.util.Map;
 
-public class GetCurrentAddressCommand implements Command {
-    private final static Logger logger = Logger.getLogger(AddHomeAddressCommand.class);
+public class ReserveBookCommand implements Command {
+    private final static Logger logger = Logger.getLogger(ReserveBookCommand.class);
+
 
     @Override
     public String execute(String request) {
         String response;
 
         if (logger.isDebugEnabled()) {
-            logger.debug("GetCurrentAddressCommand.execute()");
+            logger.debug("ReserveBookCommand.execute()");
         }
 
         ServiceFactory serviceFactory = ServiceFactory.getInstance();
-        ResidenceService service = serviceFactory.getResidenceService();
-        Map<String, String> address;
+        OrdersService service = serviceFactory.getOrdersService();
+        Map<String, String> order;
 
-        try{
-            address = ControllerUtil.castRequestParamToMap(request);
-            Address newAddress =  service.getCurrentAddress(ControllerUtil.initAddressObj(address).getId());
+        try {
+            order = ControllerUtil.castRequestParamToMap(request);
+            OrdersRepository newRepository = ControllerUtil.initOrderObj(order);
 
-            response = newAddress.toString();
+            if (logger.isDebugEnabled()) {
+                logger.debug(newRepository.toString());
+            }
+
+            service.reserveBook(newRepository.getBook(), newRepository.getUser());
+            response = "Book was reserved";
         } catch (ControllerUtilException e) {
-            logger.error("request params " + GetCurrentAddressCommand.class.getName() + " was incorrect: " + request,e);
+            logger.error("request params " + ReserveBookCommand.class.getName() + " was incorrect: " + request, e);
             response = "Incorrect request";
-
         } catch (ServiceException e) {
             logger.error("Error in service layer", e);
-            response = "Error during getting address procedure";
+            response = "Error during book reservation procedure";
+
         }
         return response;
     }
@@ -50,7 +56,7 @@ public class GetCurrentAddressCommand implements Command {
         boolean access = false;
 
         if (logger.isDebugEnabled()) {
-            logger.debug("GetCurrentAddressCommand.getAccess()");
+            logger.debug("ReserveBookCommand.getAccess()");
         }
 
         ServiceFactory serviceFactory = ServiceFactory.getInstance();

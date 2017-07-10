@@ -199,7 +199,7 @@ public class UserDaoImpl implements UserDao {
             resultSet = ps.executeQuery();
 
             if (!resultSet.next()) {
-                throw new DAOException("Nothing receive from db");
+                return null;
             }
 
             do {

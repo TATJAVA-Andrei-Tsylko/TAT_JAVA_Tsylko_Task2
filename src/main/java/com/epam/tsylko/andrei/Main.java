@@ -2,6 +2,8 @@ package com.epam.tsylko.andrei;
 
 
 import com.epam.tsylko.andrei.controller.Controller;
+import com.epam.tsylko.andrei.controller.util.ControllerUtil;
+import com.epam.tsylko.andrei.controller.util.ControllerUtilException;
 
 public class Main {
     public static void main(String[] args) {
@@ -91,11 +93,13 @@ public class Main {
 //        String leavesBook="action=BOOK_LEAVED_LIBRARY&orderId=5&bookId=4&id=3";
 //        System.out.println(controller.executeTask(leavesBook));
 
-//        String returnedBook="action=BOOK_RETURNED_COMMAND&orderId=5&bookId=4&id=3";
+        String returnedBook="action=BOOK_RETURNED_COMMAND&orderId=5&bookId=4&id=3";
 //        System.out.println(controller.executeTask(returnedBook));
 
-                String userRole="action=USER_ROLE&userId=11&role=SUPER_ADMIN&id=3";
-        System.out.println(controller.executeTask(userRole));
+//                String userRole="action=USER_ROLE&userId=11&role=SUPER_ADMIN&id=3";
+//        System.out.println(controller.executeTask(userRole));
+
+
 
 //        String reduceRoleCommand="action=REDUCE_ACCESS_LEVEL_COMMAND&userId=11&role=USER&id=4";
 //        System.out.println(controller.executeTask(reduceRoleCommand));

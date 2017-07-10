@@ -20,8 +20,8 @@ public class TestAddBookCommand {
     @DataProvider
     public Object[][] setUpNegativeDataForBook() {
         return new Object[][]{
-                    {"action=ADD_BOOK&booksName=Scala&id=3","Error during add procedure"},
-                    {"action=ADD_BOOK&booksName=Objective-C&ISBN=008067&id=3","Error during add procedure"},
+                    {"action=ADD_BOOK&booksName=Scala&id=3","Error during add book procedure"},
+                    {"action=ADD_BOOK&booksName=Objective-C&ISBN=008067&id=3","Error during add book procedure"},
                     {"action=ADD_BOOK&booksName=Scala&authorSurname=Adorno&ISBN=978089&id=2","Access denied"},
 
         };

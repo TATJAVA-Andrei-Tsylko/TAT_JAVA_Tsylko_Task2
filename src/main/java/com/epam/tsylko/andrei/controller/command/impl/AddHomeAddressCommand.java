@@ -14,7 +14,7 @@ import org.apache.log4j.Logger;
 
 import java.util.Map;
 
-public class GetCurrentAddressCommand implements Command {
+public class AddHomeAddressCommand implements Command {
     private final static Logger logger = Logger.getLogger(AddHomeAddressCommand.class);
 
     @Override
@@ -22,7 +22,7 @@ public class GetCurrentAddressCommand implements Command {
         String response;
 
         if (logger.isDebugEnabled()) {
-            logger.debug("GetCurrentAddressCommand.execute()");
+            logger.debug("AddHomeAddressCommand.execute()");
         }
 
         ServiceFactory serviceFactory = ServiceFactory.getInstance();
@@ -31,16 +31,17 @@ public class GetCurrentAddressCommand implements Command {
 
         try{
             address = ControllerUtil.castRequestParamToMap(request);
-            Address newAddress =  service.getCurrentAddress(ControllerUtil.initAddressObj(address).getId());
+            Address newAddress = ControllerUtil.initAddressObj(address);
 
-            response = newAddress.toString();
+            service.enterHomeAddress(newAddress);
+            response = "Address was added";
         } catch (ControllerUtilException e) {
-            logger.error("request params " + GetCurrentAddressCommand.class.getName() + " was incorrect: " + request,e);
+            logger.error("request params " + AddHomeAddressCommand.class.getName() + " was incorrect: " + request,e);
             response = "Incorrect request";
 
         } catch (ServiceException e) {
             logger.error("Error in service layer", e);
-            response = "Error during getting address procedure";
+            response = "Error during add address procedure";
         }
         return response;
     }
@@ -50,7 +51,7 @@ public class GetCurrentAddressCommand implements Command {
         boolean access = false;
 
         if (logger.isDebugEnabled()) {
-            logger.debug("GetCurrentAddressCommand.getAccess()");
+            logger.debug("AddHomeAddressCommand.getAccess()");
         }
 
         ServiceFactory serviceFactory = ServiceFactory.getInstance();

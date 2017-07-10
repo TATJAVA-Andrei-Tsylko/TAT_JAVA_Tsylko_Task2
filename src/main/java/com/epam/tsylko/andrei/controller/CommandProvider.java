@@ -20,8 +20,8 @@ public final class CommandProvider {
         repository.put(CommandName.EDIT_BOOK, new GetEditBookCommand());
         repository.put(CommandName.GET_BOOK, new GetBookCommand());
         repository.put(CommandName.BOOK_AVAILABILITY_STATUS, new BookAvailabilityStatus());
-        repository.put(CommandName.HOME_ADDRESS, new GetHomeAddressCommand());
-        repository.put(CommandName.EDIT_ADDRESS, new GetEditAddressCommand());
+        repository.put(CommandName.HOME_ADDRESS, new AddHomeAddressCommand());
+        repository.put(CommandName.EDIT_ADDRESS, new EditAddressCommand());
         repository.put(CommandName.CURRENT_ADDRESS, new GetCurrentAddressCommand());
         repository.put(CommandName.USER_REGISTRATION, new RegistrateCommand());
         repository.put(CommandName.USER_EDITED, new GetEditUserCommand());
@@ -29,7 +29,7 @@ public final class CommandProvider {
         repository.put(CommandName.GET_USER, new GetUserCommand());
         repository.put(CommandName.USER_ROLE, new ChangeUserRoleCommand());
         repository.put(CommandName.USER_STATUS, new ChangeUserStatusCommand());
-        repository.put(CommandName.BOOK_RESERVATION, new GetReservedBookCommand());
+        repository.put(CommandName.BOOK_RESERVATION, new ReserveBookCommand());
         repository.put(CommandName.CANCELLATION_BOOK_RESERVATION,new GetCancelBookReservationCommand());
         repository.put(CommandName.BOOK_LEAVED_LIBRARY,new GetLivedLibraryBookCommand());
         repository.put(CommandName.BOOK_RETURNED_COMMAND,new ReceiveBookFormUserCommand());

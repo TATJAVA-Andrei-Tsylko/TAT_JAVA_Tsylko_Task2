@@ -13,10 +13,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public final class Util {
-    private static Logger logger = Logger.getLogger(Util.class);
+    private final static Logger logger = Logger.getLogger(Util.class);
     private static final String ISBN = "^(97(8|9))?\\d{5}(\\d|X)$";
     private static final String EMAIL = "\\w+@[a-zA-Z_]+?\\.[a-zA-Z]{2,6}";
     private static final String DATE = "\\d{4}-\\d{2}-\\d{2}";
+    private static final String SHA = "SHA-256";
 
     public final static void isNull(Object... objects) throws UtilException {
         for (Object ob : objects) {
@@ -79,35 +80,33 @@ public final class Util {
     }
 
 
-    public final static String convertDateToString(Date indate) throws UtilException {
-        String dateString = null;
-        SimpleDateFormat sdfr = new SimpleDateFormat("yyyy-MM-dd");
-        try {
-
-            dateString = sdfr.format(indate.getTime());
-        } catch (Exception e) {
-            throw new UtilException("Error in method castStringToSqlDate. Cannot cast date from SQLDate to String", e);
-        }
-        return dateString;
-    }
-
     public final static String getHashForPassword(String password) throws UtilException {
-        logger.debug("Util.getHashForPassword()");
-        MessageDigest md = null;
-        try {
-            md = MessageDigest.getInstance("SHA-256");
-        } catch (NoSuchAlgorithmException e) {
-            throw new UtilException("Error in method getHashForPassword. Cannot encrypt password", e);
-        }
-        md.update(password.getBytes());
-
-        byte byteData[] = md.digest();
-
         StringBuffer sb = new StringBuffer();
-        for (int i = 0; i < byteData.length; i++) {
-            sb.append(Integer.toString((byteData[i] & 0xff) + 0x100, 16).substring(1));
+        if(password!=null && !password.isEmpty()) {
+
+            if (logger.isDebugEnabled()) {
+                logger.debug("Util.getHashForPassword()");
+            }
+
+            MessageDigest md;
+            try {
+                md = MessageDigest.getInstance(SHA);
+            } catch (NoSuchAlgorithmException e) {
+                throw new UtilException("Error in method getHashForPassword. Cannot encrypt password", e);
+            }
+            md.update(password.getBytes());
+
+            byte byteData[] = md.digest();
+
+
+            for (int i = 0; i < byteData.length; i++) {
+                sb.append(Integer.toString((byteData[i] & 0xff) + 0x100, 16).substring(1));
+            }
+            logger.debug("hash " + sb.toString());
+        }else {
+            throw new UtilException("Password is empty or null");
         }
-        logger.debug("hash " + sb.toString());
+
         return sb.toString();
     }
 

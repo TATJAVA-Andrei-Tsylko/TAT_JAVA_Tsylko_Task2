@@ -43,7 +43,7 @@ public class RegistrateCommand implements Command {
             response = "Incorrect request";
         } catch (ServiceException e) {
             logger.error("Error in service layer", e);
-            response = "Error during add procedure";
+            response = "Error during registration procedure";
         }
         return response;
     }

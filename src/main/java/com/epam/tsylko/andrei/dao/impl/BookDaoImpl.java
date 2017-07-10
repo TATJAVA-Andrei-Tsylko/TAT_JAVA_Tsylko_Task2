@@ -22,7 +22,7 @@ public class BookDaoImpl implements BookDao {
             "VALUES (?, ?, ?, ?, ?, ?, ?, ?,?);";
     private static final String UPD_BOOK = "UPDATE `library`.`book` SET `booksName`=?,`authorName`=?, `authorSurname`=?, `publisher`=?, `cityPublisher`=?, `yearPublished`=?, " +
             "`ISBN`=?, `printRun`=?, `paperBack`=?  WHERE `id`=?;";
-    private static final String BOOK_IS_NOT_AVAILABLE = "UPDATE `library`.`book` SET `isValidBook`=? WHERE `id`=?;";
+    private static final String BOOK_IS_NOT_AVAILABLE = "UPDATE `library`.`book` SET `availability`=? WHERE `id`=?;";
     private static final String GET_BOOK = "SELECT `id`, `booksName`, `authorName`,`authorSurname`, `publisher`, `cityPublisher`, `yearPublished`, `ISBN`,`printRun`, `paperBack`, `availability` ,`reservation` FROM library.book where id = ?;";
     private static final String GET_BOOKS = "SELECT `id`, `booksName`, `authorName`,`authorSurname`, `publisher`, `cityPublisher`, `yearPublished`, `ISBN`,`printRun`, `paperBack`, `availability` ,`reservation` FROM library.book;";
     private static final String FREE_SORTED_BOOKS = "SELECT `id`, `booksName`, `authorName`,`authorSurname`, `publisher`, `cityPublisher`, `yearPublished`, `ISBN`,`printRun`, `paperBack`, `availability` ,`reservation` FROM library.book where library.book.isFree = 1 ORDER by library.book.yearPublished = ?;";

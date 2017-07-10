@@ -2,7 +2,11 @@ package com.epam.tsylko.andrei.controller;
 
 
 import com.epam.tsylko.andrei.controller.command.Command;
+import com.epam.tsylko.andrei.controller.util.ControllerUtil;
+import com.epam.tsylko.andrei.controller.util.ControllerUtilException;
 import org.apache.log4j.Logger;
+
+import javax.naming.ldap.Control;
 
 public final class Controller {
 
@@ -10,33 +14,45 @@ public final class Controller {
     private final CommandProvider provider = new CommandProvider();
 
     private final char paramDelimiter = '&';
-
     private final char start = '=';
-
+//TODO checher for inputted request
     public String executeTask(String request) {
         String commandName;
         Command executionCommand;
+        String response="";
 
-        commandName = request.substring(request.indexOf(start) + 1, request.indexOf(paramDelimiter));
-        logger.debug(commandName);
-        executionCommand = provider.getCommand(commandName);
-        String response;
-        if (executionCommand.getAccess(request)) {
+        try {
+            ControllerUtil.checkRequestLink(request);
 
-            if (logger.isDebugEnabled()) {
-                logger.debug("Access level is applied");
-            }
-
-            response = executionCommand.execute(request);
-
-        } else {
+            commandName = request.substring(request.indexOf(start) + 1, request.indexOf(paramDelimiter));
 
             if (logger.isDebugEnabled()) {
-                logger.debug("Access denied: " + request);
+                logger.debug(commandName);
             }
 
-            response = "Access denied";
+            executionCommand = provider.getCommand(commandName);
+
+            if (executionCommand.getAccess(request)) {
+
+                if (logger.isDebugEnabled()) {
+                    logger.debug("Access level is applied");
+                }
+
+                response = executionCommand.execute(request);
+
+            } else {
+
+                if (logger.isDebugEnabled()) {
+                    logger.debug("Access denied: " + request);
+                }
+
+                response = "Access denied";
+            }
+        } catch (ControllerUtilException e) {
+            logger.error("Invalid link " + request);
+            response = "Invalid link";
         }
+
         return response;
     }
 

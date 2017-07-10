@@ -12,7 +12,7 @@ import java.sql.SQLException;
 
 public class TransactionDaoImpl implements TransactionDao {
     private final static Logger logger = Logger.getLogger(TransactionDaoImpl.class);
-    private static final String FREE_BOOK = "UPDATE `library`.`book` SET `isFree`=? WHERE `id`=?;";
+    private static final String FREE_BOOK = "UPDATE `library`.`book` SET `reservation`=? WHERE `id`=?;";
 
     @Override
     public void makeBookNotFree(int bookId, boolean booksFreeStatus, Connection connection) throws DAOException {
@@ -30,7 +30,7 @@ public class TransactionDaoImpl implements TransactionDao {
                 preparedStatement.executeUpdate();
 
             } catch (SQLException e) {
-                throw new DAOException("Cannot change isReservation state", e);
+                throw new DAOException("Cannot change reservation status", e);
             }
         }
 

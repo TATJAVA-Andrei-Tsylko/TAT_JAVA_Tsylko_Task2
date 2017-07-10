@@ -18,6 +18,7 @@ import java.util.List;
 public class ClientServiceImpl implements ClientService {
     private final static Logger logger = Logger.getLogger(ClientServiceImpl.class);
     private final DAOFactory daoFactory = DAOFactory.getInstance();
+    private final static boolean USER_DISABLED = false;
 
     @Override
     public void registration(User user) throws ServiceException {
@@ -65,6 +66,9 @@ public class ClientServiceImpl implements ClientService {
             }
 
             Util.checkHash(userFromDB.getPassword(), user.getPassword());
+            if(userFromDB.isStatus()==USER_DISABLED){
+                throw new ServiceException("User was banned.");
+            }
         } catch (DAOException e) {
             throw new ServiceException("Service layer. exception occurred in dao layer", e);
         } catch (UtilException e) {
@@ -124,6 +128,7 @@ public class ClientServiceImpl implements ClientService {
 
         UserDao userDao = daoFactory.getMysqlUserImpl();
         User user;
+
         try {
 
             user = userDao.getUser(userId);
@@ -285,6 +290,7 @@ public class ClientServiceImpl implements ClientService {
         }
 
         User checkedUser;
+
         try {
             checkedUser = getUser(user);
         } catch (ServiceException e) {

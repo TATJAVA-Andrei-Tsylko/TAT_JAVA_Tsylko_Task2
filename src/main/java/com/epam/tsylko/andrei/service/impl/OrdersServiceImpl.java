@@ -1,13 +1,16 @@
 package com.epam.tsylko.andrei.service.impl;
 
 import com.epam.tsylko.andrei.dao.OrdersRepositoryDao;
+import com.epam.tsylko.andrei.dao.UserDao;
 import com.epam.tsylko.andrei.dao.exception.DAOException;
 import com.epam.tsylko.andrei.dao.factory.DAOFactory;
 import com.epam.tsylko.andrei.entity.Book;
 import com.epam.tsylko.andrei.entity.OrdersRepository;
 import com.epam.tsylko.andrei.entity.User;
+import com.epam.tsylko.andrei.service.ClientService;
 import com.epam.tsylko.andrei.service.OrdersService;
 import com.epam.tsylko.andrei.service.exception.ServiceException;
+import com.epam.tsylko.andrei.service.factory.ServiceFactory;
 import org.apache.log4j.Logger;
 
 import java.util.List;
@@ -25,9 +28,14 @@ public class OrdersServiceImpl implements OrdersService {
         }
 
         OrdersRepositoryDao ordersRepositoryDao = daoFactory.getMysqlOrdersRepositoryDao();
+        ServiceFactory serviceFactory = ServiceFactory.getInstance();
+        ClientService service = serviceFactory.getClientService();
+
 
         try {
+
             ordersRepositoryDao.reserveBookByUser(book, user);
+
         } catch (DAOException e) {
             throw new ServiceException("Error occurred in reserveBook() method in service layer, class OrdersServiceImpl", e);
         }
