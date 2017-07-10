@@ -1,7 +1,7 @@
 package com.epam.tsylko.andrei.service;
 
 
-import com.epam.tsylko.andrei.entities.Book;
+import com.epam.tsylko.andrei.entity.Book;
 import com.epam.tsylko.andrei.service.exception.ServiceException;
 
 import java.util.List;

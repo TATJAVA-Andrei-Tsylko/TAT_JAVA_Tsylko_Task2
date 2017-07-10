@@ -5,7 +5,8 @@ import com.epam.tsylko.andrei.controller.command.Command;
 import org.apache.log4j.Logger;
 
 public final class Controller {
-    private static Logger logger = Logger.getLogger(Controller.class);
+
+    private final static Logger logger = Logger.getLogger(Controller.class);
     private final CommandProvider provider = new CommandProvider();
 
     private final char paramDelimiter = '&';
@@ -21,14 +22,25 @@ public final class Controller {
         executionCommand = provider.getCommand(commandName);
         String response;
         if (executionCommand.getAccess(request)) {
-            logger.debug("Access level is applied");
+
+            if (logger.isDebugEnabled()) {
+                logger.debug("Access level is applied");
+            }
+
             response = executionCommand.execute(request);
 
         } else {
+
+            if (logger.isDebugEnabled()) {
+                logger.debug("Access denied: " + request);
+            }
+
             response = "Access denied";
         }
-
         return response;
     }
 
+
 }
+
+

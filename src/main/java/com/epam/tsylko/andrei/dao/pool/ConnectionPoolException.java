@@ -1,7 +1,7 @@
 package com.epam.tsylko.andrei.dao.pool;
 
 
-import com.epam.tsylko.andrei.dao.exceptions.DAOException;
+import com.epam.tsylko.andrei.dao.exception.DAOException;
 
 public class ConnectionPoolException extends DAOException {
 

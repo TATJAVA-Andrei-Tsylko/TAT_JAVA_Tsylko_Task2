@@ -13,29 +13,28 @@ public final class CommandProvider {
 
     private final Map<CommandName, Command> repository = new HashMap<>();
 
-    //TODO private or public??
     public CommandProvider() {
-        repository.put(CommandName.SIGN_IN, new SignIn());
-        repository.put(CommandName.ADD_BOOK, new AddedBook());
-        repository.put(CommandName.SHOW_ALL_BOOKS, new AllBooks());
-        repository.put(CommandName.EDIT_BOOK, new EditedBook());
+        repository.put(CommandName.SIGN_IN, new SignInCommand());
+        repository.put(CommandName.ADD_BOOK, new AddBookCommand());
+        repository.put(CommandName.SHOW_ALL_BOOKS, new GetAllBooksCommand());
+        repository.put(CommandName.EDIT_BOOK, new GetEditBookCommand());
         repository.put(CommandName.GET_BOOK, new GetBookCommand());
         repository.put(CommandName.BOOK_AVAILABILITY_STATUS, new BookAvailabilityStatus());
-        repository.put(CommandName.HOME_ADDRESS, new HomeAddress());
-        repository.put(CommandName.EDIT_ADDRESS, new EditedAddress());
-        repository.put(CommandName.CURRENT_ADDRESS, new CurrentAddress());
-        repository.put(CommandName.USER_REGISTRATION, new Registration());
-        repository.put(CommandName.USER_EDITED, new EditedUser());
-        repository.put(CommandName.ALL_USERS, new AllUsers());
-        repository.put(CommandName.GET_USER, new SingleUser());
-        repository.put(CommandName.USER_ROLE, new UserRole());
-        repository.put(CommandName.USER_STATUS, new UserStatus());
-        repository.put(CommandName.BOOK_RESERVATION, new BookReservation());
-        repository.put(CommandName.CANCELLATION_BOOK_RESERVATION,new CancellationBookReservation());
-        repository.put(CommandName.BOOK_LEAVED_LIBRARY,new BookLeavedLibrary());
-        repository.put(CommandName.BOOK_RETURNED_COMMAND,new BookReturnCommand());
+        repository.put(CommandName.HOME_ADDRESS, new GetHomeAddressCommand());
+        repository.put(CommandName.EDIT_ADDRESS, new GetEditAddressCommand());
+        repository.put(CommandName.CURRENT_ADDRESS, new GetCurrentAddressCommand());
+        repository.put(CommandName.USER_REGISTRATION, new RegistrateCommand());
+        repository.put(CommandName.USER_EDITED, new GetEditUserCommand());
+        repository.put(CommandName.ALL_USERS, new GetAllUsersCommand());
+        repository.put(CommandName.GET_USER, new GetUserCommand());
+        repository.put(CommandName.USER_ROLE, new ChangeUserRoleCommand());
+        repository.put(CommandName.USER_STATUS, new ChangeUserStatusCommand());
+        repository.put(CommandName.BOOK_RESERVATION, new GetReservedBookCommand());
+        repository.put(CommandName.CANCELLATION_BOOK_RESERVATION,new GetCancelBookReservationCommand());
+        repository.put(CommandName.BOOK_LEAVED_LIBRARY,new GetLivedLibraryBookCommand());
+        repository.put(CommandName.BOOK_RETURNED_COMMAND,new ReceiveBookFormUserCommand());
         repository.put(CommandName.REDUCE_ACCESS_LEVEL_COMMAND,new ReduceAccessLevelCommand());
-        repository.put(CommandName.SORTED_BOOKS,new SortedFreeBooksByDate());
+        repository.put(CommandName.SORTED_BOOKS,new GetSortedFreeBooksByDateCommand());
     }
 
 

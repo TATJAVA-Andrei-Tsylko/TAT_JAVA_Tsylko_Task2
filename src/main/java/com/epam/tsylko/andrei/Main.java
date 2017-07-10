@@ -2,15 +2,6 @@ package com.epam.tsylko.andrei;
 
 
 import com.epam.tsylko.andrei.controller.Controller;
-import com.epam.tsylko.andrei.controller.util.ControllerUtil;
-import com.epam.tsylko.andrei.controller.util.exception.ControllerUtilException;
-import com.epam.tsylko.andrei.entities.Role;
-import com.epam.tsylko.andrei.service.ClientService;
-import com.epam.tsylko.andrei.service.exception.ServiceException;
-import com.epam.tsylko.andrei.service.factory.ServiceFactory;
-import com.epam.tsylko.andrei.service.impl.ClientServiceImpl;
-
-import java.util.Map;
 
 public class Main {
     public static void main(String[] args) {
@@ -46,7 +37,7 @@ public class Main {
 //        String getBook="action=GET_BOOK&bookId=3&id=3";
 //                System.out.println(controller.executeTask(getBook));
 
-//        String blockedBook="action=BOOK_AVAILABILITY_STATUS&bookId=3&isValidBook=false&id=3";
+//        String blockedBook="action=BOOK_AVAILABILITY_STATUS&bookId=3&isAvailable=false&id=3";
 //        System.out.println(controller.executeTask(blockedBook));
 
 
@@ -78,8 +69,8 @@ public class Main {
 //        String oneUser="action=GET_USER&userId=10&email=anto@mail.ru&phone=37525515666&id=10";
 //        System.out.println(controller.executeTask(oneUser));
 
-//        String userRole="action=USER_ROLE&role=SUPER_ADMIN&id=2";
-//        System.out.println(controller.executeTask(userRole));
+
+
 
 
 //                String userStatus="action=USER_STATUS&userId=11&id=3";
@@ -103,14 +94,17 @@ public class Main {
 //        String returnedBook="action=BOOK_RETURNED_COMMAND&orderId=5&bookId=4&id=3";
 //        System.out.println(controller.executeTask(returnedBook));
 
-//        String reduceRoleCommand="action=REDUCE_ACCESS_LEVEL_COMMAND&userId=10&role=USER&id=4";
+                String userRole="action=USER_ROLE&userId=11&role=SUPER_ADMIN&id=3";
+        System.out.println(controller.executeTask(userRole));
+
+//        String reduceRoleCommand="action=REDUCE_ACCESS_LEVEL_COMMAND&userId=11&role=USER&id=4";
 //        System.out.println(controller.executeTask(reduceRoleCommand));
 
 //        String signIn="action=SIGN_IN&login=monk3&password=monk3";
 //        System.out.println(controller.executeTask(signIn));
-
-        String sordtedFreeBooks="action=SORTED_BOOKS&order=desc";
-        System.out.println(controller.executeTask(sordtedFreeBooks));
+//
+//        String sordtedFreeBooks="action=SORTED_BOOKS&order=desc";
+//        System.out.println(controller.executeTask(sordtedFreeBooks));
 
 
 //        System.out.println(ControllerUtil.cutActionPart(a));

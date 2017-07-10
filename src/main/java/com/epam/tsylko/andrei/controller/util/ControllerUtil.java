@@ -1,9 +1,7 @@
 package com.epam.tsylko.andrei.controller.util;
 
 
-import com.epam.tsylko.andrei.controller.util.exception.ControllerUtilException;
-import com.epam.tsylko.andrei.entities.*;
-import com.epam.tsylko.andrei.service.OrdersService;
+import com.epam.tsylko.andrei.entity.*;
 import org.apache.log4j.Logger;
 
 
@@ -69,7 +67,7 @@ public class ControllerUtil {
         return new java.sql.Date(date.getTime());
     }
 
-
+//TODO INNER CLASS
     public final static Book initBookObj(Map<String, String> dataFromRequest) throws ControllerUtilException {
         logger.debug("ControllerUtil.initBookObj()");
         Book book;

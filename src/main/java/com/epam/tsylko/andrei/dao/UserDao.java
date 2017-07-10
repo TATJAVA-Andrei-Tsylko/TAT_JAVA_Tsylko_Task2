@@ -1,8 +1,8 @@
 package com.epam.tsylko.andrei.dao;
 
-import com.epam.tsylko.andrei.entities.Role;
-import com.epam.tsylko.andrei.entities.User;
-import com.epam.tsylko.andrei.dao.exceptions.DAOException;
+import com.epam.tsylko.andrei.entity.Role;
+import com.epam.tsylko.andrei.entity.User;
+import com.epam.tsylko.andrei.dao.exception.DAOException;
 
 import java.util.List;
 

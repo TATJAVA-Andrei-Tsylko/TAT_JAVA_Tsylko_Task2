@@ -3,12 +3,12 @@ package com.epam.tsylko.andrei.dao.pool;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-
+//TODO import
 import java.sql.*;
 
 public class ConnectionPool {
     private static final Logger logger = Logger.getLogger(ConnectionPool.class);
-    //    private ConnectionPool instance;
+//    private ConnectionPool pool = new ConnectionPool();
     private Connection instance;
     private String driverName;
     private String url;
@@ -17,7 +17,7 @@ public class ConnectionPool {
     private int poolSize;
 
     //TODO private constructor
-    public ConnectionPool() throws ConnectionPoolException {
+    private ConnectionPool() throws ConnectionPoolException {
         try {
             DBResourceManager dbResourceManager = DBResourceManager.getInstance();
             logger.info("System found database property file");
@@ -27,13 +27,36 @@ public class ConnectionPool {
             this.password = dbResourceManager.getValue(DBParameter.DB_PASSWORD);
             this.instance = DriverManager.getConnection(url, user, password);
         } catch (SQLException e) {
-            throw new ConnectionPoolException("Cannot create connection pool", e);
+            throw new ConnectionPoolException("Cannot get connection from pool", e);
         }
+
+
+//            throw new ConnectionPoolException("Cannot create connection pool", e);
 
     }
 
     //TODO static method nd return
-    public Connection getConnection() {
+
+    public static ConnectionPool getInstance() throws ConnectionPoolException {
+        return new ConnectionPool();
+    }
+
+    public Connection getConnection() throws ConnectionPoolException, SQLException {
+
+//        try{
+//            instance = DriverManager.getConnection(url, user, password);
+//
+//            if(logger.isInfoEnabled()){
+//                logger.info("Get connection from database");
+//            }
+//
+//        }catch (SQLException e){
+//            throw new ConnectionPoolException("Cannot get connection from pool", e);
+//        }
+        if(logger.isDebugEnabled()){
+            logger.debug("Connection hash number: " + instance.getMetaData().hashCode());
+        }
+
         return instance;
     }
 
@@ -46,19 +69,8 @@ public class ConnectionPool {
     }
 
     public void closeConnection(Connection connection, Statement st, ResultSet rs) {
-        try {
-//            TODO
-            this.returnConnection(connection);
-        } catch (ConnectionPoolException e) {
-            logger.log(Level.ERROR, "Connection isn't return to the pool");
-        }
-        if (st != null) {
-            try {
-                st.close();
-            } catch (SQLException e) {
-                logger.log(Level.ERROR, "Statement isn't return to the pool");
-            }
-        }
+
+
         if (rs != null) {
             try {
                 rs.close();
@@ -66,22 +78,36 @@ public class ConnectionPool {
                 logger.log(Level.ERROR, "ResultSet isn't return to the pool");
             }
         }
-
-    }
-
-    public void closeConnection(Connection connection, Statement st) {
-        try {
-//            TODO
-            this.returnConnection(connection);
-        } catch (ConnectionPoolException e) {
-            logger.log(Level.ERROR, "Connection isn't return to the pool");
-        }
         if (st != null) {
             try {
                 st.close();
             } catch (SQLException e) {
                 logger.log(Level.ERROR, "Statement isn't return to the pool");
             }
+        }
+        try {
+//            TODO
+            this.returnConnection(connection);
+        } catch (ConnectionPoolException e) {
+            logger.log(Level.ERROR, "Connection isn't return to the pool");
+        }
+
+    }
+
+    public void closeConnection(Connection connection, Statement st) {
+
+        if (st != null) {
+            try {
+                st.close();
+            } catch (SQLException e) {
+                logger.log(Level.ERROR, "Statement isn't return to the pool");
+            }
+        }
+        try {
+//            TODO
+            this.returnConnection(connection);
+        } catch (ConnectionPoolException e) {
+            logger.log(Level.ERROR, "Connection isn't return to the pool");
         }
     }
 }

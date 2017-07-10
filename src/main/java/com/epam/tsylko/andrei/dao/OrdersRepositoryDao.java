@@ -1,9 +1,9 @@
 package com.epam.tsylko.andrei.dao;
 
-import com.epam.tsylko.andrei.entities.Book;
-import com.epam.tsylko.andrei.entities.OrdersRepository;
-import com.epam.tsylko.andrei.entities.User;
-import com.epam.tsylko.andrei.dao.exceptions.DAOException;
+import com.epam.tsylko.andrei.entity.Book;
+import com.epam.tsylko.andrei.entity.OrdersRepository;
+import com.epam.tsylko.andrei.entity.User;
+import com.epam.tsylko.andrei.dao.exception.DAOException;
 
 import java.util.List;
 

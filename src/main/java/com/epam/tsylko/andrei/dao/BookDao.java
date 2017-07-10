@@ -1,8 +1,8 @@
 package com.epam.tsylko.andrei.dao;
 
 
-import com.epam.tsylko.andrei.entities.Book;
-import com.epam.tsylko.andrei.dao.exceptions.DAOException;
+import com.epam.tsylko.andrei.entity.Book;
+import com.epam.tsylko.andrei.dao.exception.DAOException;
 
 import java.sql.Connection;
 import java.util.List;
@@ -18,8 +18,6 @@ public interface BookDao {
     void editBook(Book book) throws DAOException;
 
     void makeBookUnAvailable(int bookId, boolean booksAvailabilityStatus) throws DAOException;
-
-    void makeBookNotFree(int bookId, boolean booksFreeStatus,Connection connection) throws DAOException;
 
     List<Book> sortFreeBooksByDate(String sortOrder) throws DAOException;
 

@@ -1,8 +1,8 @@
 package com.epam.tsylko.andrei.dao;
 
 
-import com.epam.tsylko.andrei.entities.Address;
-import com.epam.tsylko.andrei.dao.exceptions.DAOException;
+import com.epam.tsylko.andrei.entity.Address;
+import com.epam.tsylko.andrei.dao.exception.DAOException;
 
 public interface AddressDao {
 

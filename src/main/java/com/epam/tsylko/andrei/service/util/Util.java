@@ -1,8 +1,7 @@
 package com.epam.tsylko.andrei.service.util;
 
 
-import com.epam.tsylko.andrei.controller.command.impl.SignIn;
-import com.epam.tsylko.andrei.entities.User;
+import com.epam.tsylko.andrei.entity.User;
 import com.epam.tsylko.andrei.service.util.exception.UtilException;
 import org.apache.log4j.Logger;
 
