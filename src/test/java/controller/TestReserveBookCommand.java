@@ -14,6 +14,7 @@ public class TestReserveBookCommand {
         return new Object[][]{
                 {"action=BOOK_RESERVATION&userId=11&bookId=3&id=3","Book was reserved"},
                 {"action=BOOK_RESERVATION&userId=11&bookId=4&id=12","Book was reserved"},
+                {"action=BOOK_RESERVATION&userId=11&bookId=6&id=12","Book was reserved"},
 
 
         };
@@ -23,7 +24,7 @@ public class TestReserveBookCommand {
         return new Object[][]{
 
                 {"action=BOOK_RESERVATION&userId=11&bookId=5","Access denied"},
-                {"action=BOOK_RESERVATION","Invalid link"},
+                {"action=BOOK_RESERVATION","Access denied"},
                 {"action=BOOK_RESERVATION&userId=11&bookId=-5&id=3","Error during book reservation procedure"},
                 {"action=BOOK_RESERVATION&userId=11&bookId=6&id=11","Access denied"},
         };

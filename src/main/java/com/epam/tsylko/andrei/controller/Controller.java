@@ -6,7 +6,6 @@ import com.epam.tsylko.andrei.controller.util.ControllerUtil;
 import com.epam.tsylko.andrei.controller.util.ControllerUtilException;
 import org.apache.log4j.Logger;
 
-import javax.naming.ldap.Control;
 
 public final class Controller {
 
@@ -15,16 +14,31 @@ public final class Controller {
 
     private final char paramDelimiter = '&';
     private final char start = '=';
-//TODO checher for inputted request
+
     public String executeTask(String request) {
         String commandName;
         Command executionCommand;
-        String response="";
+        String response;
 
         try {
-            ControllerUtil.checkRequestLink(request);
+            if (ControllerUtil.checkRequestLinkWithoutParams(request)) {
 
-            commandName = request.substring(request.indexOf(start) + 1, request.indexOf(paramDelimiter));
+                commandName = request.substring(request.indexOf(start) + 1, request.length());
+
+                if (logger.isDebugEnabled()) {
+                    logger.debug("Command without params: " + commandName);
+                }
+
+            } else {
+
+                ControllerUtil.checkRequestLink(request);
+                commandName = request.substring(request.indexOf(start) + 1, request.indexOf(paramDelimiter));
+
+                if (logger.isDebugEnabled()) {
+                    logger.debug("Command with params: " + commandName);
+                }
+
+            }
 
             if (logger.isDebugEnabled()) {
                 logger.debug(commandName);

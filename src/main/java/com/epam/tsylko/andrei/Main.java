@@ -28,7 +28,15 @@ public class Main {
 //        String addBook = "action=ADD_BOOK&booksName=Java&authorName=Mark&" +
 //                "authorSurname=Horn&publisher=Oreilly&cityPublisher=London&ISBN=978067&id=2";
 //
-//        String showAllBooks= "action=SHOW_ALL_BOOKS&id=1";
+        String showAllBooks1= "action=SHOW_ALL_BOOKS&id=1";
+        String showAllBooks2= "action=SHOW_ALL_BOOKS";
+        String showAllBooks3= "action=";
+        try {
+            System.out.println(ControllerUtil.checkRequestLinkWithoutParams(showAllBooks3) + "\n");
+            System.out.println(ControllerUtil.checkRequestLink(showAllBooks3));
+        } catch (ControllerUtilException e) {
+            e.printStackTrace();
+        }
 //
 //        System.out.println(controller.executeTask(showAllBooks));
 
@@ -93,7 +101,7 @@ public class Main {
 //        String leavesBook="action=BOOK_LEAVED_LIBRARY&orderId=5&bookId=4&id=3";
 //        System.out.println(controller.executeTask(leavesBook));
 
-        String returnedBook="action=BOOK_RETURNED_COMMAND&orderId=5&bookId=4&id=3";
+//        String returnedBook="action=BOOK_RETURNED_COMMAND&orderId=5&bookId=4&id=3";
 //        System.out.println(controller.executeTask(returnedBook));
 
 //                String userRole="action=USER_ROLE&userId=11&role=SUPER_ADMIN&id=3";

@@ -44,7 +44,6 @@ public class OrdersRepositoryDaoImpl implements OrdersRepositoryDao {
 
             connectionPool = connectionPool.getInstance();
             connection = connectionPool.getConnection();
-
             connection.setAutoCommit(false);
 
             ps = connection.prepareStatement(RESERVED_BOOK);

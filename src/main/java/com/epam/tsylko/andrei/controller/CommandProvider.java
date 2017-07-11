@@ -30,11 +30,12 @@ public final class CommandProvider {
         repository.put(CommandName.USER_ROLE, new ChangeUserRoleCommand());
         repository.put(CommandName.USER_STATUS, new ChangeUserStatusCommand());
         repository.put(CommandName.BOOK_RESERVATION, new ReserveBookCommand());
-        repository.put(CommandName.CANCELLATION_BOOK_RESERVATION,new GetCancelBookReservationCommand());
+        repository.put(CommandName.CANCELLATION_BOOK_RESERVATION,new CancelBookReservationCommand());
         repository.put(CommandName.BOOK_LEAVED_LIBRARY,new GetLivedLibraryBookCommand());
         repository.put(CommandName.BOOK_RETURNED_COMMAND,new ReceiveBookFormUserCommand());
         repository.put(CommandName.REDUCE_ACCESS_LEVEL_COMMAND,new ReduceAccessLevelCommand());
         repository.put(CommandName.SORTED_BOOKS,new GetSortedFreeBooksByDateCommand());
+        repository.put(CommandName.WRONG_REQUEST,new WrongAnswerCommand());
     }
 
 
@@ -46,7 +47,7 @@ public final class CommandProvider {
             commandName = CommandName.valueOf(name.toUpperCase());
             command = repository.get(commandName);
         } catch (IllegalArgumentException | NullPointerException e) {
-            logger.error(CommandName.valueOf(name.toUpperCase()) + " is invalid.", e);
+            logger.error(commandName + " is invalid.", e);
             command = repository.get(CommandName.WRONG_REQUEST);
         }
         return command;
