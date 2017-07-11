@@ -31,9 +31,9 @@ public class GetCurrentAddressCommand implements Command {
 
         try{
             address = ControllerUtil.castRequestParamToMap(request);
-            Address newAddress =  service.getCurrentAddress(ControllerUtil.initAddressObj(address).getId());
+            Address currentAddress =  service.getCurrentAddress(ControllerUtil.initAddressObj(address).getId());
 
-            response = newAddress.toString();
+            response = currentAddress.toString();
         } catch (ControllerUtilException e) {
             logger.error("request params " + GetCurrentAddressCommand.class.getName() + " was incorrect: " + request,e);
             response = "Incorrect request";

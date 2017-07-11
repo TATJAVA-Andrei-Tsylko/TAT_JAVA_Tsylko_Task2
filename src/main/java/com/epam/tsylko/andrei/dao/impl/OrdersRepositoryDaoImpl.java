@@ -26,7 +26,7 @@ public class OrdersRepositoryDaoImpl implements OrdersRepositoryDao {
     private static final String ALL_USERS_BOOKS = "SELECT `id`, `bookId`, `userId`,`dateOfIssuance`,`dateOfTheReturn`,`booking`,`borrowingBook`,returningBook` FROM library.oredersrepository where userId = ?;";
     private static final String REPEALED_BOOK = "UPDATE `library`.`oredersrepository` SET `isBooked`='0' WHERE `id`=?;";
     private static final String USER_TOOK_BOOK = "UPDATE `library`.`oredersrepository` SET `isTakenAway`='1' WHERE `id`=?;";
-    private static final String USER_RETURNED_BOOK = "UPDATE `library`.`oredersrepository` SET `isReturned`='1' WHERE `id`=?;\n";
+    private static final String USER_RETURNED_BOOK = "UPDATE `library`.`oredersrepository` SET `isReturned`='1' WHERE `id` = ?;";
 
     @Override
     public void reserveBookByUser(Book book, User user) throws DAOException {

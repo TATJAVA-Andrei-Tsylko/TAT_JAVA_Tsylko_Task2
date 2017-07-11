@@ -13,7 +13,7 @@ public class TestEditBookCommand {
         return new Object[][]{
                 {"action=EDIT_BOOK&bookId=39&booksName=C# Advanced&authorName=Steve&authorSurname=Horn&publisher=Oreilly&cityPublisher=London&ISBN=978067&yearPublished=2000-03-12&id=3","Book was edited"},
                 {"action=EDIT_BOOK&bookId=40&booksName=Assembler&authorName=Steve&authorSurname=Horn&publisher=Oreilly&cityPublisher=London&ISBN=978067&yearPublished=2000-03-12&id=4","Book was edited"},
-                {"action=EDIT_BOOK&bookId=41&yearPublished=2000-03-12&id=4","Book was edited"},
+
 
 
         };
@@ -25,6 +25,7 @@ public class TestEditBookCommand {
                 {"action=EDIT_BOOK&booksName=Objective-C&ISBN=008067&id=3","Error during edited book procedure"},
                 {"action=EDIT_BOOK&booksName=Scala&authorSurname=Adorno&ISBN=978089&id=2","Access denied"},
                 {"action=EDIT_BOOK&booksName=Scala&authorSurname=Adorno&ISBN=979&id=3","Error during edited book procedure"},
+                {"action=EDIT_BOOK&bookId=41&yearPublished=2000-03-12&id=4","Error during edited book procedure"},
 
         };
     }

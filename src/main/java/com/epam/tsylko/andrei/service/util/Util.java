@@ -122,37 +122,4 @@ public final class Util {
 
     }
 
-    public static <T> void copyAllFields(T to, T from) throws UtilException {
-        Class<T> clazz = (Class<T>) from.getClass();
-        List<Field> fields = getAllModelFields(clazz);
-
-        if (fields != null) {
-            for (Field field : fields) {
-
-                if (logger.isDebugEnabled()) {
-                    logger.debug("Util.copyAllFields() -> " + field.toString());
-                }
-
-                try {
-                    field.setAccessible(true);
-                    if (!java.lang.reflect.Modifier.isStatic(field.getModifiers())) {
-                        if(field.get(from)!=null) {
-                            field.set(to, field.get(from));
-                        }
-                    }
-                } catch (IllegalAccessException e) {
-                    throw new UtilException("error in method copyAllFields()", e);
-                }
-            }
-        }
-    }
-
-    private static List<Field> getAllModelFields(Class aClass) {
-        List<Field> fields = new ArrayList<>();
-        do {
-            Collections.addAll(fields, aClass.getDeclaredFields());
-            aClass = aClass.getSuperclass();
-        } while (aClass != null);
-        return fields;
-    }
 }

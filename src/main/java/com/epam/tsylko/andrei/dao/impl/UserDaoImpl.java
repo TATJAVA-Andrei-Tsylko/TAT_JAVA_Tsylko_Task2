@@ -25,7 +25,7 @@ public class UserDaoImpl implements UserDao {
     private static final String EDIT_USER = "UPDATE `library`.`user` " +
             "SET  `password`=?, `userName`=?, `userSurname`=?, `birthday`=?, `email`=?, `phone`=? WHERE `id`=?;";
 
-    private static final String USER_BLOCK_STATUS = "UPDATE `library`.`user` SET `enabled`=? WHERE `id`= ?;";
+    private static final String USER_BLOCK_STATUS = "UPDATE `library`.`user` SET `status`=? WHERE `id`= ?;";
 
     private static final String SET_ROLE = "UPDATE `library`.`user` SET `role`= ? WHERE `id`=?;";
     private static final String GET_USER = "SELECT `id`,`login`, `password`,`status`, `userName`, `userSurname`, `birthday`, `address`, `email`, `phone`,`role` FROM library.user where id =?";

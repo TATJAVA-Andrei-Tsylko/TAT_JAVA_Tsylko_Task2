@@ -39,7 +39,7 @@ public class ControllerUtil {
     private final static String ORDER = "order";
     private final static String ROLE = "role";
     private final static String USER_ID = "userId";
-    private final static String ENABLE = "enabled";
+    private final static String ENABLE = "status";
 
 
     public final static Book initBookObj(Map<String, String> dataFromRequest) throws ControllerUtilException {
@@ -171,6 +171,12 @@ public class ControllerUtil {
         return result;
     }
 
+    public final static boolean castRequestToMapToBoolean(Map<String, String> requestMap, String key) throws ControllerUtilException{
+        String requestFromMap =  getValueFromMapByKey(requestMap, key);
+        boolean result = parseBooleanValueFromString(requestFromMap);
+        return result;
+    }
+
     public final static Map<String, String> castRequestParamToMap(String request) throws ControllerUtilException {
         Map<String, String> requestParams = new HashMap<>();
         if (request != null) {
@@ -188,7 +194,7 @@ public class ControllerUtil {
     }
 
 
-    public static boolean parseBooleanValueFromString(String param) throws ControllerUtilException {
+   public static boolean parseBooleanValueFromString(String param) throws ControllerUtilException {
         if (param.equalsIgnoreCase(BOOLEAN_FALSE) || param.equalsIgnoreCase(BOOLEAN_TRUE)) {
             return Boolean.valueOf(param);
         } else {
@@ -196,6 +202,9 @@ public class ControllerUtil {
         }
 
     }
+
+
+
 
     public static String getValueFromMapByKey(Map<String, String> requestMap, String key) {
         String value = requestMap.entrySet().stream()

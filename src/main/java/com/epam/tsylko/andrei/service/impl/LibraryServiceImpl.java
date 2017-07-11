@@ -9,7 +9,7 @@ import com.epam.tsylko.andrei.service.exception.ServiceException;
 import com.epam.tsylko.andrei.service.util.Util;
 import com.epam.tsylko.andrei.service.util.exception.UtilException;
 import org.apache.log4j.Logger;
-import org.testng.internal.PropertyUtils;
+
 
 import java.util.List;
 
@@ -54,9 +54,8 @@ public class LibraryServiceImpl implements LibraryService {
                 logger.debug("bookFromDB " + bookFromDB.toString());
             }
 
-            if (checkInputtedBookDataForEditBookMethod(book)) {
+            if (checkInputtedBookData(book)) {
 
-                Util.copyAllFields(bookFromDB,book);
 
                 if (logger.isDebugEnabled()) {
                     logger.debug("LibraryServiceImpl.addEditedBook() -> copyAllFields -> " + bookFromDB.toString());
@@ -168,11 +167,4 @@ public class LibraryServiceImpl implements LibraryService {
         return true;
     }
 
-    private boolean checkInputtedBookDataForEditBookMethod(Book book) throws UtilException {
-        Util.isNumberPositive(book.getIsbn(), book.getPaperBack(), book.getPrintRun());
-        if(book.getIsbn()!=0) {
-            Util.checkISBN(book.getIsbn());
-        }
-        return true;
-    }
 }

@@ -10,6 +10,7 @@ import java.util.Map;
 
 public class UserBuilder implements Builder<User> {
     private final static String USER_ID = "userId";
+    private final static String USER_STATUS = "status";
     private final static String USER_LOGIN = "login";
     private final static String USER_PASSWORD = "password";
     private final static String USER_NAME = "userName";
@@ -25,6 +26,7 @@ public class UserBuilder implements Builder<User> {
         User user = new User(ControllerUtil.parseStringToIntFromMap(dataFromRequest, USER_ID),
                 ControllerUtil.getValueFromMapByKey(dataFromRequest, USER_LOGIN),
                 ControllerUtil.getValueFromMapByKey(dataFromRequest, USER_PASSWORD),
+                ControllerUtil.castRequestToMapToBoolean(dataFromRequest,USER_STATUS),
                 ControllerUtil.getValueFromMapByKey(dataFromRequest, USER_NAME),
                 ControllerUtil.getValueFromMapByKey(dataFromRequest, USER_SURNAME),
                 ControllerUtil.parseSQLDateFromMap(dataFromRequest, USER_BIRTHDAY),

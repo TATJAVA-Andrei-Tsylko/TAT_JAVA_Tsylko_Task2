@@ -90,7 +90,12 @@ public class OrdersServiceImpl implements OrdersService {
 
         try {
 
-            ordersRepositoryDao.setBookIsTakenAwayByUser(ordersRepositoryId);
+            if (ordersRepositoryId != 0) {
+                ordersRepositoryDao.setBookIsTakenAwayByUser(ordersRepositoryId);
+            } else {
+                throw new ServiceException("Request doesn't content ordersId");
+            }
+
 
         } catch (DAOException e) {
             throw new ServiceException("Error occurred in setBookIsTakenAwayByUser() method in service layer, class OrdersServiceImpl", e);
@@ -109,7 +114,11 @@ public class OrdersServiceImpl implements OrdersService {
 
         try {
 
-            ordersRepositoryDao.setBookIsReturnedByUser(ordersRepository);
+            if (ordersRepository.getId() != 0) {
+                ordersRepositoryDao.setBookIsReturnedByUser(ordersRepository);
+            } else {
+                throw new ServiceException("Request doesn't content ordersId");
+            }
 
         } catch (DAOException e) {
             throw new ServiceException("Error occurred in setBookIsReturnedByUser() method in service layer, class OrdersServiceImpl", e);

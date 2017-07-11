@@ -32,7 +32,7 @@ public final class CommandProvider {
         repository.put(CommandName.BOOK_RESERVATION, new ReserveBookCommand());
         repository.put(CommandName.CANCELLATION_BOOK_RESERVATION,new CancelBookReservationCommand());
         repository.put(CommandName.BOOK_LEAVED_LIBRARY,new GetLivedLibraryBookCommand());
-        repository.put(CommandName.BOOK_RETURNED_COMMAND,new ReceiveBookFormUserCommand());
+        repository.put(CommandName.BOOK_RETURNED_COMMAND,new ReceiveBookFromUserCommand());
         repository.put(CommandName.REDUCE_ACCESS_LEVEL_COMMAND,new ReduceAccessLevelCommand());
         repository.put(CommandName.SORTED_BOOKS,new GetSortedFreeBooksByDateCommand());
         repository.put(CommandName.WRONG_REQUEST,new WrongAnswerCommand());

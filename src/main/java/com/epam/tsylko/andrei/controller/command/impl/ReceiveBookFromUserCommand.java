@@ -1,6 +1,5 @@
 package com.epam.tsylko.andrei.controller.command.impl;
 
-
 import com.epam.tsylko.andrei.controller.command.Command;
 import com.epam.tsylko.andrei.controller.util.ControllerUtil;
 import com.epam.tsylko.andrei.controller.util.ControllerUtilException;
@@ -14,16 +13,14 @@ import org.apache.log4j.Logger;
 
 import java.util.Map;
 
-public class GetLivedLibraryBookCommand implements Command {
-    private final static Logger logger = Logger.getLogger(GetLivedLibraryBookCommand.class);
-
-
+public class ReceiveBookFromUserCommand implements Command {
+    private final static Logger logger = Logger.getLogger(ReceiveBookFromUserCommand.class);
     @Override
     public String execute(String request) {
         String response;
 
         if (logger.isDebugEnabled()) {
-            logger.debug("GetLivedLibraryBookCommand.execute()");
+            logger.debug("ReceiveBookFromUserCommand.execute()");
         }
 
         ServiceFactory serviceFactory = ServiceFactory.getInstance();
@@ -32,20 +29,20 @@ public class GetLivedLibraryBookCommand implements Command {
 
         try {
             order = ControllerUtil.castRequestParamToMap(request);
-            OrdersRepository bookUsedByUser = ControllerUtil.initOrderObj(order);
+            OrdersRepository bookReturnedByUser = ControllerUtil.initOrderObj(order);
 
             if (logger.isDebugEnabled()) {
-                logger.debug(bookUsedByUser.toString());
+                logger.debug(bookReturnedByUser.toString());
             }
 
-            service.setBookIsTakenAwayByUser(bookUsedByUser.getId());
-            response = "Book lived the library";
+            service.setBookIsReturnedByUser(bookReturnedByUser);
+            response = "Book was returned by user";
         } catch (ControllerUtilException e) {
-            logger.error("request params " + GetLivedLibraryBookCommand.class.getName() + " was incorrect: " + request, e);
+            logger.error("request params " + ReceiveBookFromUserCommand.class.getName() + " was incorrect: " + request, e);
             response = "Incorrect request";
         } catch (ServiceException e) {
             logger.error("Error in service layer", e);
-            response = "Error during operation isBorrowingBook";
+            response = "Error during operation book returning";
 
         }
         return response;
@@ -56,7 +53,7 @@ public class GetLivedLibraryBookCommand implements Command {
         boolean access = false;
 
         if (logger.isDebugEnabled()) {
-            logger.debug("GetLivedLibraryBookCommand.getAccess()");
+            logger.debug("ReceiveBookFromUserCommand.getAccess()");
         }
 
         ServiceFactory serviceFactory = ServiceFactory.getInstance();
