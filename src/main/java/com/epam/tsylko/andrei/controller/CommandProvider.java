@@ -17,14 +17,14 @@ public final class CommandProvider {
         repository.put(CommandName.SIGN_IN, new SignInCommand());
         repository.put(CommandName.ADD_BOOK, new AddBookCommand());
         repository.put(CommandName.SHOW_ALL_BOOKS, new GetAllBooksCommand());
-        repository.put(CommandName.EDIT_BOOK, new GetEditBookCommand());
+        repository.put(CommandName.EDIT_BOOK, new EditBookCommand());
         repository.put(CommandName.GET_BOOK, new GetBookCommand());
         repository.put(CommandName.BOOK_AVAILABILITY_STATUS, new BookAvailabilityStatus());
         repository.put(CommandName.HOME_ADDRESS, new AddHomeAddressCommand());
         repository.put(CommandName.EDIT_ADDRESS, new EditAddressCommand());
         repository.put(CommandName.CURRENT_ADDRESS, new GetCurrentAddressCommand());
         repository.put(CommandName.USER_REGISTRATION, new RegistrateCommand());
-        repository.put(CommandName.USER_EDITED, new GetEditUserCommand());
+        repository.put(CommandName.USER_EDITED, new EditUserCommand());
         repository.put(CommandName.ALL_USERS, new GetAllUsersCommand());
         repository.put(CommandName.GET_USER, new GetUserCommand());
         repository.put(CommandName.USER_ROLE, new ChangeUserRoleCommand());

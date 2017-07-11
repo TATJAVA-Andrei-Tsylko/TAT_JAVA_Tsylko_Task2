@@ -5,10 +5,14 @@ import com.epam.tsylko.andrei.entity.User;
 import com.epam.tsylko.andrei.service.util.exception.UtilException;
 import org.apache.log4j.Logger;
 
+import java.lang.reflect.Field;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -82,7 +86,7 @@ public final class Util {
 
     public final static String getHashForPassword(String password) throws UtilException {
         StringBuffer sb = new StringBuffer();
-        if(password!=null && !password.isEmpty()) {
+        if (password != null && !password.isEmpty()) {
 
             if (logger.isDebugEnabled()) {
                 logger.debug("Util.getHashForPassword()");
@@ -103,7 +107,7 @@ public final class Util {
                 sb.append(Integer.toString((byteData[i] & 0xff) + 0x100, 16).substring(1));
             }
             logger.debug("hash " + sb.toString());
-        }else {
+        } else {
             throw new UtilException("Password is empty or null");
         }
 
@@ -116,5 +120,39 @@ public final class Util {
         }
         throw new UtilException("Util.checkHash() false");
 
+    }
+
+    public static <T> void copyAllFields(T to, T from) throws UtilException {
+        Class<T> clazz = (Class<T>) from.getClass();
+        List<Field> fields = getAllModelFields(clazz);
+
+        if (fields != null) {
+            for (Field field : fields) {
+
+                if (logger.isDebugEnabled()) {
+                    logger.debug("Util.copyAllFields() -> " + field.toString());
+                }
+
+                try {
+                    field.setAccessible(true);
+                    if (!java.lang.reflect.Modifier.isStatic(field.getModifiers())) {
+                        if(field.get(from)!=null) {
+                            field.set(to, field.get(from));
+                        }
+                    }
+                } catch (IllegalAccessException e) {
+                    throw new UtilException("error in method copyAllFields()", e);
+                }
+            }
+        }
+    }
+
+    private static List<Field> getAllModelFields(Class aClass) {
+        List<Field> fields = new ArrayList<>();
+        do {
+            Collections.addAll(fields, aClass.getDeclaredFields());
+            aClass = aClass.getSuperclass();
+        } while (aClass != null);
+        return fields;
     }
 }

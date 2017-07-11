@@ -37,14 +37,14 @@ public class BookAvailabilityStatus implements Command {
             if (logger.isDebugEnabled()) {
                 logger.debug(existedBook.toString());
             }
-
-            if (book.containsKey(BOOK_ACCESSIBILITY_KEY)) {
+            if (existedBook.getId() > 0 && book.containsKey(BOOK_ACCESSIBILITY_KEY)) {
                 String validBook = ControllerUtil.getValueFromMapByKey(book, BOOK_ACCESSIBILITY_KEY);
                 service.makeBookUnAvailable(existedBook.getId(), ControllerUtil.parseBooleanValueFromString(validBook));
                 response = "Status was changed";
-            }else {
-                response = "request doesn't content key status";
+            } else{
+                response = "request doesn't content key status or bookId";
             }
+
 
         } catch (ServiceException e) {
             response = "Incorrect request";

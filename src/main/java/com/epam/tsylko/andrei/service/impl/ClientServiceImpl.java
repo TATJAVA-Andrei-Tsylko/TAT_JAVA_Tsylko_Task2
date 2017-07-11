@@ -88,8 +88,11 @@ public class ClientServiceImpl implements ClientService {
         try {
 
             Util.checkEmail(user);
-            Util.isEmptyString(user.getPassword());
-            user.setPassword(Util.getHashForPassword(user.getPassword()));
+            if(user.getPassword()!=null) {
+                user.setPassword(Util.getHashForPassword(user.getPassword()));
+            }else{
+                user.setPassword(userDao.getUser(user.getId()).getPassword());
+            }
             userDao.editUser(user);
 
         } catch (DAOException e) {

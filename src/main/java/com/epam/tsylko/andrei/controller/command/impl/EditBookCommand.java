@@ -4,49 +4,48 @@ package com.epam.tsylko.andrei.controller.command.impl;
 import com.epam.tsylko.andrei.controller.command.Command;
 import com.epam.tsylko.andrei.controller.util.ControllerUtil;
 import com.epam.tsylko.andrei.controller.util.ControllerUtilException;
-import com.epam.tsylko.andrei.entity.Address;
+import com.epam.tsylko.andrei.entity.Book;
 import com.epam.tsylko.andrei.entity.Role;
 import com.epam.tsylko.andrei.service.ClientService;
-import com.epam.tsylko.andrei.service.ResidenceService;
+import com.epam.tsylko.andrei.service.LibraryService;
 import com.epam.tsylko.andrei.service.exception.ServiceException;
 import com.epam.tsylko.andrei.service.factory.ServiceFactory;
 import org.apache.log4j.Logger;
 
 import java.util.Map;
 
-public class EditAddressCommand implements Command{
-    private final static Logger logger = Logger.getLogger(AddHomeAddressCommand.class);
+public class EditBookCommand implements Command {
+    private final static Logger logger = Logger.getLogger(AddBookCommand.class);
+
 
     @Override
     public String execute(String request) {
         String response;
 
         if (logger.isDebugEnabled()) {
-            logger.debug("EditAddressCommand.execute()");
+            logger.debug("EditBookCommand.execute()");
         }
 
         ServiceFactory serviceFactory = ServiceFactory.getInstance();
-        ResidenceService service = serviceFactory.getResidenceService();
-        Map<String, String> address;
+        LibraryService service = serviceFactory.getLibraryService();
+        Map<String, String> book;
 
-        try{
-            address = ControllerUtil.castRequestParamToMap(request);
-            Address newAddress = ControllerUtil.initAddressObj(address);
-            if(newAddress.getId()==0){
-                response = "Incorrect request";
-                logger.error("Request doesn't content id");
-            }else{
-                service.updateHomeAddress(newAddress);
-                response = "Edited address was added";
+        try {
+            book = ControllerUtil.castRequestParamToMap(request);
+            Book editedBook = ControllerUtil.initBookObj(book);
+
+            if (logger.isDebugEnabled()) {
+                logger.debug(editedBook.toString());
             }
 
+            service.addEditedBook(editedBook);
+            response = "Book was edited";
         } catch (ControllerUtilException e) {
-            logger.error("request params " + EditAddressCommand.class.getName() + " was incorrect: " + request,e);
+            logger.error("request params " + EditBookCommand.class.getName() + " was incorrect: " + request);
             response = "Incorrect request";
-
         } catch (ServiceException e) {
             logger.error("Error in service layer", e);
-            response = "Error during edit address procedure";
+            response = "Error during edited book procedure";
         }
         return response;
     }
@@ -56,7 +55,7 @@ public class EditAddressCommand implements Command{
         boolean access = false;
 
         if (logger.isDebugEnabled()) {
-            logger.debug("EditAddressCommand.getAccess()");
+            logger.debug("EditBookCommand.getAccess()");
         }
 
         ServiceFactory serviceFactory = ServiceFactory.getInstance();
@@ -64,7 +63,7 @@ public class EditAddressCommand implements Command{
 
         try {
             int userId = ControllerUtil.findUserIdInRequest(request);
-            access = clientService.checkUserRole(userId, Role.SUPER_ADMIN, Role.ADMIN,Role.USER);
+            access = clientService.checkUserRole(userId, Role.SUPER_ADMIN, Role.ADMIN);
         } catch (ServiceException e) {
             logger.error("Error in service layer", e);
         } catch (ControllerUtilException e) {

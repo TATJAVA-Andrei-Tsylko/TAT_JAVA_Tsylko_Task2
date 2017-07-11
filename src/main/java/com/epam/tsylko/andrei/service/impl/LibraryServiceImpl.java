@@ -9,6 +9,7 @@ import com.epam.tsylko.andrei.service.exception.ServiceException;
 import com.epam.tsylko.andrei.service.util.Util;
 import com.epam.tsylko.andrei.service.util.exception.UtilException;
 import org.apache.log4j.Logger;
+import org.testng.internal.PropertyUtils;
 
 import java.util.List;
 
@@ -31,7 +32,7 @@ public class LibraryServiceImpl implements LibraryService {
             }
 
         } catch (UtilException e) {
-            throw new ServiceException("Incorrect values. This values don't math to book object",e);
+            throw new ServiceException("Incorrect values. This values don't math to book object", e);
         } catch (DAOException e) {
             throw new ServiceException("Error occurred in addNewBook() method", e);
         }
@@ -48,12 +49,24 @@ public class LibraryServiceImpl implements LibraryService {
 
         try {
 
-            if (checkInputtedBookData(book)) {
-                bookDao.editBook(book);
+            Book bookFromDB = bookDao.getBook(book.getId());
+            if (logger.isDebugEnabled()) {
+                logger.debug("bookFromDB " + bookFromDB.toString());
+            }
+
+            if (checkInputtedBookDataForEditBookMethod(book)) {
+
+                Util.copyAllFields(bookFromDB,book);
+
+                if (logger.isDebugEnabled()) {
+                    logger.debug("LibraryServiceImpl.addEditedBook() -> copyAllFields -> " + bookFromDB.toString());
+                }
+
+                bookDao.editBook(bookFromDB);
             }
 
         } catch (UtilException e) {
-            throw new ServiceException("Incorrect values. This values don't math to book object",e);
+            throw new ServiceException("Incorrect values. This values don't math to book object", e);
         } catch (DAOException e) {
             throw new ServiceException("Error occurred in addEditedBook() method in service layer", e);
         }
@@ -102,7 +115,6 @@ public class LibraryServiceImpl implements LibraryService {
     }
 
 
-
     @Override
     public List<Book> sortFreeBooksByDate(String order) throws ServiceException {
 
@@ -111,7 +123,7 @@ public class LibraryServiceImpl implements LibraryService {
         }
 
         BookDao bookDao = daoFactory.getMysqlBookImpl();
-        List<Book> books ;
+        List<Book> books;
 
         try {
 
@@ -148,11 +160,19 @@ public class LibraryServiceImpl implements LibraryService {
 
     private boolean checkInputtedBookData(Book book) throws UtilException {
 
-        Util.isNull(book.getBooksName(), book.getAuthorSurname());
+        Util.isNull(book.getBooksName(), book.getAuthorSurname(), book.getIsbn());
         Util.isEmptyString(book.getBooksName(), book.getAuthorSurname());
         Util.isNumberPositive(book.getIsbn(), book.getPaperBack(), book.getPrintRun());
         Util.checkISBN(book.getIsbn());
 
+        return true;
+    }
+
+    private boolean checkInputtedBookDataForEditBookMethod(Book book) throws UtilException {
+        Util.isNumberPositive(book.getIsbn(), book.getPaperBack(), book.getPrintRun());
+        if(book.getIsbn()!=0) {
+            Util.checkISBN(book.getIsbn());
+        }
         return true;
     }
 }
